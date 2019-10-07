@@ -15,7 +15,8 @@ from matplotlib.colors import ListedColormap
     # constant definitions
 """
 
-from systemsGaSb import *
+from system_geometry import shapes
+from hamiltonians.gasb_hamiltonian import * 
 
 
 # Formatação para os gráficos:
@@ -29,14 +30,14 @@ plt.rc('font', family='serif')
 def formatter_current_axis(value, tick_number):
     #Copiado para phd
     "Function for changing units of axis"
-    return int(round(value * a0/10))
+    return int(round(value * shapes.A0/10))
 
 def edit_axis(axis, spin):
     # Copiado para phd
     "Editing axis"
-    axis.set_ylim(-W_std/2, W_std/2)
-    axis.xaxis.set_major_locator(plt.MultipleLocator(L_std/2))
-    axis.yaxis.set_major_locator(plt.MultipleLocator(W_std/2))
+    axis.set_ylim(-shapes.W_STD/2, shapes.W_STD/2)
+    axis.xaxis.set_major_locator(plt.MultipleLocator(shapes.L_STD/2))
+    axis.yaxis.set_major_locator(plt.MultipleLocator(shapes.W_STD/2))
 
     if spin.lower() == 'total':
         axis.set_title("(b)", fontsize=FONT_TITLES)
@@ -136,7 +137,7 @@ def band_values(syst, momenta, params, eF_value = 0):
     Calculate the energy bands and return it as a matrix.
 
         * syst      : kwant finalized system
-        * momenta   : array with values for kx in units of a_std^{-1}
+        * momenta   : array with values for kx in units of shapes.A_STD^{-1}
         * params    : dictionary with parameters for Hamiltonian
         * eF        : value for electric field perpendicualr to the QW
     """
@@ -165,7 +166,7 @@ def band_with_line_gasb(momenta, energies, kx_max=0.25, E_min=300, E_max = 500, 
     esse, por sua vez, tem unidade também dependente dos parâmetros
     do Hamiltoniano.
     """
-    momenta *= (a_std*a0*10**(-1))**(-1) # conversion to nm^{-1}
+    momenta *= (shapes.A_STD*shapes.A0*10**(-1))**(-1) # conversion to nm^{-1}
 
     fig = plt.figure()
     axis = fig.add_subplot(111)
@@ -185,7 +186,7 @@ def band_with_line_gasb(momenta, energies, kx_max=0.25, E_min=300, E_max = 500, 
 def bands_cont2D_and_discr(axis, cont_energies, disc_energies, momenta, kx_max=0.25, E_min=300, E_max = 500, E_line = None):
     # fig = plt.figure(figsize=(8,10))
     # axis = fig.add_subplot(111)
-    momenta *= (a_std * a0*10**(-1))**(-1) # conversion to nm^{-1}
+    momenta *= (shapes.A_STD * shapes.A0*10**(-1))**(-1) # conversion to nm^{-1}
     axis.plot(momenta, cont_energies, linewidth=2.5,color="blue")
     axis.plot(momenta, disc_energies, linewidth = 0.8, color="black", linestyle="-")
     axis.hlines(E_line, -kx_max, kx_max, linewidth = 2.0, linestyle = "--", color = "red")

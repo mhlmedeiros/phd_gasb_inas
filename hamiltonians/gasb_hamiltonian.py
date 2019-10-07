@@ -1,6 +1,8 @@
 '''
     GaSb-Geometry (GaSb/InAs/GaSb) Hamiltonian definitions.
 
+    Originaly it was named as "systemsGaSb.py" on "GaSb_InAs_project".
+
     Module to store functions to build systems adopted by kwant for transport
     calculations in GaSb-InAs-GaSb Quantum Wells.
 
@@ -12,6 +14,8 @@
 import kwant, kwant.continuum
 import numpy as np
 
+from system_geometry.shapes import *
+
 """
     # Default values for building the systems:
     #
@@ -20,12 +24,12 @@ import numpy as np
     # of Bohr's radius.
 
 """
-a0 = 0.529167 # raio de Bohr em Å = 10e-10 m
-L_std  = 500    # nm = 10e-9
-W_std  = 300    # nm = 10e-9
-a_std  = 60     # units of Bohr's radius
-L_std *= 10/a0  # convertion into units of Bohr's radius
-W_std *= 10/a0  # convertion into units of Bohr's radius
+# A0 = 0.529167 # raio de Bohr em Å = 10e-10 m
+# L_STD  = 500    # nm = 10e-9
+# W_STD  = 300    # nm = 10e-9
+# A_STD  = 60     # units of Bohr's radius
+# L_STD *= 10/A0  # convertion into units of Bohr's radius
+# W_STD *= 10/A0  # convertion into units of Bohr's radius
 
 # Funtions of electric field magnitude:
 def ΔE_ΔR(x, A):
@@ -383,7 +387,7 @@ def hamiltonian_110_k_minus():
 
 
 # Builder:
-def system_builder(hamiltonian, centralShape, a = a_std):
+def system_builder(hamiltonian, centralShape, a = A_STD):
     '''
     Here we define the system's geometry as a rectangular slab attached with leads
     of same width.
@@ -400,12 +404,12 @@ def system_builder(hamiltonian, centralShape, a = a_std):
         W -> width of the leads and for scattering region
 
     All of these last parameter have default values
-        a_std   = 60        # units of Bohr's radius
+        A_STD   = 60        # units of Bohr's radius
         L_nano  = 500       # nanometers
         W_nano  = 300       # nanometers
 
-        L_std   = L_nano * 10/ a0   # units of Bohr's radius
-        W_std   = W_nano * 10/ a0   # units of Bohr's radius
+        L_STD   = L_nano * 10/ A0   # units of Bohr's radius
+        W_STD   = W_nano * 10/ A0   # units of Bohr's radius
 
     '''
     template = kwant.continuum.discretize(hamiltonian, grid=a)
