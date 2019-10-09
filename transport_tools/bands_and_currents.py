@@ -16,7 +16,7 @@ from matplotlib.colors import ListedColormap
 """
 
 from system_geometry import shapes
-from hamiltonians.gasb_hamiltonian import * 
+from hamiltonians.gasb_hamiltonian import *
 
 
 # Formatação para os gráficos:
@@ -46,7 +46,7 @@ def edit_axis(axis, spin):
     elif spin.lower() == 'down':
         axis.set_title("(d)", fontsize=FONT_TITLES)
 
-    if spin != 'down':
+    if (spin.lower() == 'total') or (spin.lower() == 'up'):
         axis.xaxis.set_major_formatter(matplotlib.ticker.NullFormatter())
         axis.yaxis.set_major_formatter(matplotlib.ticker.NullFormatter())
     else:
