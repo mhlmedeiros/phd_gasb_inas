@@ -8,6 +8,7 @@ topological insulators 2D".
 Author: Marcos Medeiros
 email: mhlmedeiros@gmail.com
 '''
+#!/usr/bin/env python
 
 import numpy as np
 import matplotlib
