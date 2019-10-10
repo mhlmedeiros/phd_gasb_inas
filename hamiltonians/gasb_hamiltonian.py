@@ -92,47 +92,6 @@ def γVGeral(x, *args):
 
 # Hamiltonians for the systems :
 
-def hamiltonian_97_k_minus():
-    '''
-    Hamiltonian given by Guilherme:
-
-    This function produces the hamiltonian for the system with
-    width of 97 Å.
-    '''
-    sympify = kwant.continuum.sympify
-
-    subs = {
-    'H_11' : 'EC + (k_x**2 + k_y**2) * GammaC + AlphaC(eF, A3, B3) * (k_x + k_y)',
-    'H_12' : '+1j * (k_x - 1j * k_y) * Px(P)',
-    'H_16' : '-(k_x**2 - k_y**2) * Eta2 - 1j * k_x * k_y * Eta3',
-    'H_21' : '-1j * (k_x + 1j * k_y) * Px(P)',
-    'H_22' : 'EV + DeltaE(eF, A2) + (k_x**2 + k_y**2) * (GammaV + DeltaGamma(eF,A1,B1,C1)) + AlphaV(eF,A4,B4,C4) * (k_x + k_y)',
-    'H_33' : 'EV - DeltaE(eF, A2) + (k_x**2 + k_y**2) * (GammaV - DeltaGamma(eF,A1,B1,C1)) + AlphaV(eF,A4,B4,C4) * (k_x + k_y)',
-    'H_34' : '(k_x**2 - k_y**2) * Eta2 + 1j * k_x * k_y * Eta3',
-    'H_43' : '(k_x**2 - k_y**2) * Eta2 - 1j * k_x * k_y * Eta3',
-    'H_44' : 'EC + (k_x**2 + k_y**2) * GammaC - AlphaC(eF,A3,B3) * (k_x + k_y)',
-    'H_45' : '+1j * (k_x + 1j * k_y) * Px(P)',
-    'H_54' : '-1j * (k_x - 1j * k_y) * Px(P)',
-    'H_55' : 'EV + DeltaE(eF,A2) + (k_x**2 + k_y**2) * (GammaV + DeltaGamma(eF,A1,B1,C1)) - AlphaV(eF,A4,B4,C4) * (k_x + k_y)',
-    'H_61' : '-(k_x**2 - k_y**2) * Eta2 + 1j * k_x * k_y * Eta3',
-    'H_66' : 'EV - DeltaE(eF,A2) + (k_x**2 + k_y**2) * (GammaV - DeltaGamma(eF,A1,B1,C1)) - AlphaV(eF,A4,B4,C4) * (k_x + k_y)'
-    }
-
-
-
-    hamiltonian = sympify("""
-       13.6 * 1000 *[
-       [H_11, H_12,    0,    0,    0, H_16],
-       [H_21, H_22,    0,    0,    0,    0],
-       [   0,    0, H_33, H_34,    0,    0],
-       [   0,    0, H_43, H_44, H_45,    0],
-       [   0,    0,    0, H_54, H_55,    0],
-       [ H_61,   0,    0,    0,    0, H_66]
-       ]
-       """, locals = subs)
-
-    return hamiltonian
-
 def hamiltonian_97_k_plus():
     '''
     Hamiltonian given by Guilherme:
@@ -174,6 +133,112 @@ def hamiltonian_97_k_plus():
 
     return hamiltonian
 
+def hamiltonian_97_k_minus():
+    '''
+    Hamiltonian given by Guilherme:
+
+    This function produces the hamiltonian for the system with
+    width of 97 Å.
+    '''
+    sympify = kwant.continuum.sympify
+
+    subs = {
+    'H_11' : 'EC + (k_x**2 + k_y**2) * GammaC + AlphaC(eF, A3, B3) * (k_x + k_y)',
+    'H_12' : '+1j * (k_x - 1j * k_y) * Px(P)',
+    'H_16' : '-(k_x**2 - k_y**2) * Eta2 - 1j * k_x * k_y * Eta3',
+    'H_21' : '-1j * (k_x + 1j * k_y) * Px(P)',
+    'H_22' : 'EV + DeltaE(eF, A2) + (k_x**2 + k_y**2) * (GammaV + DeltaGamma(eF,A1,B1,C1)) + AlphaV(eF,A4,B4,C4) * (k_x + k_y)',
+    'H_33' : 'EV - DeltaE(eF, A2) + (k_x**2 + k_y**2) * (GammaV - DeltaGamma(eF,A1,B1,C1)) + AlphaV(eF,A4,B4,C4) * (k_x + k_y)',
+    'H_34' : '(k_x**2 - k_y**2) * Eta2 + 1j * k_x * k_y * Eta3',
+    'H_43' : '(k_x**2 - k_y**2) * Eta2 - 1j * k_x * k_y * Eta3',
+    'H_44' : 'EC + (k_x**2 + k_y**2) * GammaC - AlphaC(eF,A3,B3) * (k_x + k_y)',
+    'H_45' : '+1j * (k_x + 1j * k_y) * Px(P)',
+    'H_54' : '-1j * (k_x - 1j * k_y) * Px(P)',
+    'H_55' : 'EV + DeltaE(eF,A2) + (k_x**2 + k_y**2) * (GammaV + DeltaGamma(eF,A1,B1,C1)) - AlphaV(eF,A4,B4,C4) * (k_x + k_y)',
+    'H_61' : '-(k_x**2 - k_y**2) * Eta2 + 1j * k_x * k_y * Eta3',
+    'H_66' : 'EV - DeltaE(eF,A2) + (k_x**2 + k_y**2) * (GammaV - DeltaGamma(eF,A1,B1,C1)) - AlphaV(eF,A4,B4,C4) * (k_x + k_y)'
+    }
+
+
+
+    hamiltonian = sympify("""
+       13.6 * 1000 *[
+       [H_11, H_12,    0,    0,    0, H_16],
+       [H_21, H_22,    0,    0,    0,    0],
+       [   0,    0, H_33, H_34,    0,    0],
+       [   0,    0, H_43, H_44, H_45,    0],
+       [   0,    0,    0, H_54, H_55,    0],
+       [ H_61,   0,    0,    0,    0, H_66]
+       ]
+       """, locals = subs)
+
+    return hamiltonian
+
+
+def hamiltonian_97_up():
+    '''
+    Hamiltonian given by Guilherme:
+
+    This function produces the first block of the hamiltonian for the system
+    with width of 97 Å. Note that we've adopted Eta3 == Eta2 == 0 here in order to
+    uncouple the superior and inferior blocks of the original Hamiltonian.
+
+    We've also considered the version "plus" of the Hamiltonian.
+    '''
+    sympify = kwant.continuum.sympify
+
+    subs = {
+    'H_11' : 'EC + (k_x**2 + k_y**2) * GammaC + AlphaC(eF, A3, B3) * (k_x + k_y)',
+    'H_12' : '+1j * (k_x + 1j * k_y) * Px(P)',
+    'H_21' : '-1j * (k_x - 1j * k_y) * Px(P)',
+    'H_22' : 'EV + DeltaE(eF, A2) + (k_x**2 + k_y**2) * (GammaV + DeltaGamma(eF,A1,B1,C1)) + AlphaV(eF,A4,B4,C4) * (k_x + k_y)',
+    'H_33' : 'EV - DeltaE(eF, A2) + (k_x**2 + k_y**2) * (GammaV - DeltaGamma(eF,A1,B1,C1)) + AlphaV(eF,A4,B4,C4) * (k_x + k_y)'
+    }
+
+    hamiltonian = sympify("""
+       13.6 * 1000 *[
+       [H_11, H_12,    0],
+       [H_21, H_22,    0],
+       [   0,    0, H_33]
+       ]
+       """, locals = subs)
+
+    return hamiltonian
+
+def hamiltonian_97_down():
+
+    """
+    Hamiltonian given by Guilherme:
+
+    This function produces the first block of the hamiltonian for the system
+    with width of 97 Å. Note that we've adopted Eta3 == Eta2 == 0 here in order to
+    uncouple the superior and inferior blocks of the original Hamiltonian.
+
+    We've also considered the version "plus" of the Hamiltonian."""
+
+    sympify = kwant.continuum.sympify
+
+    subs = {
+    'H_44' : 'EC + (k_x**2 + k_y**2) * GammaC - AlphaC(eF,A3,B3) * (k_x + k_y)',
+    'H_45' : '+1j * (k_x - 1j * k_y) * Px(P)',
+    'H_54' : '-1j * (k_x + 1j * k_y) * Px(P)',
+    'H_55' : 'EV + DeltaE(eF,A2) + (k_x**2 + k_y**2) * (GammaV + DeltaGamma(eF,A1,B1,C1)) - AlphaV(eF,A4,B4,C4) * (k_x + k_y)',
+    'H_66' : 'EV - DeltaE(eF,A2) + (k_x**2 + k_y**2) * (GammaV - DeltaGamma(eF,A1,B1,C1)) - AlphaV(eF,A4,B4,C4) * (k_x + k_y)'
+    }
+
+
+
+    hamiltonian = sympify("""
+       13.6 * 1000 *[
+       [H_44, H_45,    0],
+       [H_54, H_55,    0],
+       [   0,    0, H_66]
+       ]
+       """, locals = subs)
+
+    return hamiltonian
+
+
 def hamiltonian_103_k_plus():
     '''
     Hamiltonian given by Guilherme with modifications:
@@ -213,7 +278,7 @@ def hamiltonian_103_k_plus():
         'H_61' : '-(k_x**2 - k_y**2) * Eta2 + 1j * k_x * k_y * Eta3',
         'H_65' : '+1j * DeltaR(eF, A1)',
         'H_66' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) - DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) - AlphaV(eF, A7, B7, C7) * (k_x + k_y)'
-        }
+    }
 
 
 
@@ -276,6 +341,75 @@ def hamiltonian_103_k_minus():
     """, locals = subs)
 
     return hamiltonian
+
+
+def hamiltonian_103_up():
+    '''
+    Hamiltonian given by Guilherme:
+
+    This function produces the first block of the hamiltonian for the system
+    with width of 103 Å. Note that we've adopted Eta3 == Eta2 == 0 here in order to
+    uncouple the superior and inferior blocks of the original Hamiltonian.
+
+    We've also considered the version "plus" of the Hamiltonian.
+    '''
+    sympify = kwant.continuum.sympify
+
+    subs = {
+        'H_11' : 'EC + (k_x + k_y) * AlphaC(eF, A6, B6, C6) + (k_x**2 + k_y**2) * GammaC(eF, A2, B2) ',
+        'H_12' : '+1j * (k_x + 1j * k_y) * Px(eF, A5, B5, C5)',
+        'H_21' : '-1j * (k_x - 1j * k_y) * Px(eF, A5, B5, C5)',
+        'H_22' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) + DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) + AlphaV(eF, A7, B7, C7) * (k_x + k_y)',
+        'H_23' : '+1j * DeltaR(eF, A1)',
+        'H_32' : '-1j * DeltaR(eF, A1)',
+        'H_33' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) - DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) + AlphaV(eF, A7, B7, C7) * (k_x + k_y)'
+        }
+
+    hamiltonian = kw_sympify("""
+           13.6 * 1000 *[
+           [H_11, H_12,    0],
+           [H_21, H_22, H_23],
+           [   0, H_32, H_33]
+           ]
+    """, locals = subs)
+
+    return hamiltonian
+
+def hamiltonian_103_down():
+
+    """
+    Hamiltonian given by Guilherme:
+
+    This function produces the first block of the hamiltonian for the system
+    with width of 103 Å. Note that we've adopted Eta3 == Eta2 == 0 here in order to
+    uncouple the superior and inferior blocks of the original Hamiltonian.
+
+    We've also considered the version "plus" of the Hamiltonian."""
+
+    sympify = kwant.continuum.sympify
+
+    subs = {
+        'H_44' : 'EC + (k_x**2 + k_y**2) * GammaC(eF, A2, B2) - AlphaC(eF, A6, B6, C6) * (k_x + k_y)',
+        'H_45' : '+1j * (k_x - 1j * k_y) * Px(eF, A5, B5, C5)',
+        'H_54' : '-1j * (k_x + 1j * k_y) * Px(eF, A5, B5, C5)',
+        'H_55' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) + DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) - AlphaV(eF, A7, B7, C7) * (k_x + k_y)',
+        'H_56' : '-1j * DeltaR(eF, A1)',
+        'H_65' : '+1j * DeltaR(eF, A1)',
+        'H_66' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) - DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) - AlphaV(eF, A7, B7, C7) * (k_x + k_y)'
+    }
+
+
+
+    hamiltonian = kw_sympify("""
+           13.6 * 1000 *[
+           [H_44, H_45,    0],
+           [H_54, H_55, H_56],
+           [   0, H_65, H_66]
+           ]
+    """, locals = subs)
+
+    return hamiltonian
+
 
 def hamiltonian_110_k_plus():
     '''
@@ -385,6 +519,75 @@ def hamiltonian_110_k_minus():
     return hamiltonian
 
 
+def hamiltonian_110_up():
+    '''
+    Hamiltonian given by Guilherme:
+
+    This function produces the first block of the hamiltonian for the system
+    with width of 110 Å. Note that we've adopted Eta3 == Eta2 == 0 here in order to
+    uncouple the superior and inferior blocks of the original Hamiltonian.
+
+    We've also considered the version "plus" of the Hamiltonian.
+    '''
+    sympify = kwant.continuum.sympify
+
+    subs = {
+    'H_11' : 'EC + (k_x**2 + k_y**2) * GammaC(eF, A2, B2) + AlphaC(eF, A5, B5, C5) * (k_x + k_y)',
+    'H_12' : '+1j * (k_x + 1j * k_y) * Px(P)',
+    'H_21' : '-1j * (k_x - 1j * k_y) * Px(P)',
+    'H_22' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) + DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) + AlphaV(eF, A6, B6, C6) * (k_x + k_y)',
+    'H_23' : '+1j * DeltaR(eF, A1)',
+    'H_32' : '-1j * DeltaR(eF, A1)',
+    'H_33' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) - DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) + AlphaV(eF, A6, B6, C6) * (k_x + k_y)'
+    }
+
+
+
+    hamiltonian = sympify("""
+       13.6 * 1000 *[
+       [H_11, H_12,    0],
+       [H_21, H_22, H_23],
+       [   0, H_32, H_33]
+       ]
+       """, locals = subs)
+
+    return hamiltonian
+
+def hamiltonian_110_down():
+
+    """
+    Hamiltonian given by Guilherme:
+
+    This function produces the first block of the hamiltonian for the system
+    with width of 110 Å. Note that we've adopted Eta3 == Eta2 == 0 here in order to
+    uncouple the superior and inferior blocks of the original Hamiltonian.
+
+    We've also considered the version "plus" of the Hamiltonian."""
+
+    sympify = kwant.continuum.sympify
+
+    subs = {
+    'H_44' : 'EC + (k_x**2 + k_y**2) * GammaC(eF, A2, B2) - AlphaC(eF, A5, B5, C5) * (k_x + k_y)',
+    'H_45' : '+1j * (k_x - 1j * k_y) * Px(P)',
+    'H_54' : '-1j * (k_x + 1j * k_y) * Px(P)',
+    'H_55' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) + DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) - AlphaV(eF, A6, B6, C6) * (k_x + k_y)',
+    'H_56' : '-1j * DeltaR(eF, A1)',
+    'H_65' : '+1j * DeltaR(eF, A1)',
+    'H_66' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) - DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) - AlphaV(eF, A6, B6, C6) * (k_x + k_y)'
+    }
+
+
+
+    hamiltonian = sympify("""
+       13.6 * 1000 *[
+       [H_44, H_45,    0],
+       [H_54, H_55, H_56],
+       [   0, H_65, H_66]
+       ]
+       """, locals = subs)
+
+    return hamiltonian
+
 
 # Builder:
 def system_builder(hamiltonian, centralShape, a = A_STD):
@@ -433,6 +636,19 @@ def system_builder(hamiltonian, centralShape, a = A_STD):
 
     syst = syst.finalized()
     return syst
+
+def just_lead_builder(hamiltonian, W = W_STD, a = A_STD):
+
+    template = kwant.continuum.discretize(hamiltonian, grid=a)
+
+    def lead_shape(site):
+        (x, y) = site.pos
+        return (-W/2 < y < W/2)
+
+    lead = kwant.Builder(kwant.TranslationalSymmetry([-a, 0]))
+    lead.fill(template, lead_shape, (0, 0))
+
+    return lead.finalized()
 
 
 params_97 = {
