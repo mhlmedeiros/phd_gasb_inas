@@ -14,8 +14,10 @@ from transport_tools import bands_and_currents as tools
 
 def main():
     # Define the system
-    ham = gasb.hamiltonian_97_k_plus()
-    syst_lead = gasb.just_lead_builder(ham)
+    ham_up       = gasb.hamiltonian_97_up()
+    ham_dn       = gasb.hamiltonian_97_down()
+    syst_lead_up = gasb.just_lead_builder(ham_up)
+    syst_lead_dn = gasb.just_lead_builder(ham_dn)
 
     # Set params
     parametros = gasb.params_97
@@ -26,15 +28,24 @@ def main():
     # Calculate bands
     Nkx = 200
     porcent = 0.15
-    momenta = np.linspace(-1, 1, Nkx) * np.pi * porcent
-    bands = kwant.physics.Bands(syst_lead, params = parametros)
-    energies = [bands(k) for k in momenta]
+    momenta_up = np.linspace(-1, 1, Nkx) * np.pi * porcent
+    momenta_dn = np.linspace(-1, 1, Nkx) * np.pi * porcent
 
+
+    bands_up = kwant.physics.Bands(syst_lead_up, params = parametros)
+    bands_dn = kwant.physics.Bands(syst_lead_dn, params = parametros)
+
+    energies_up = [bands_up(k) for k in momenta_up]
+    energies_dn = [bands_dn(k) for k in momenta_dn]
 
     # Plot bands
-    fig, ax = plt.subplots(1, 1, figsize=(8,8))
-    tools.band_with_line_gasb(ax, momenta, energies,
-                            kx_max = 0.15, E_max = 450, E_min = 400)
+    fig, ax = plt.subplots(1, 2, figsize=(16,8))
+    tools.band_with_line_gasb(ax[0], momenta_up, energies_up,
+                            kx_max = 0.15, E_max = 470, E_min = 400)
+    tools.band_with_line_gasb(ax[1], momenta_dn, energies_dn,
+                            kx_max = 0.15, E_max = 470, E_min = 400)
+    plt.tight_layout()
+    plt.show()
 
 
 if __name__ == '__main__':

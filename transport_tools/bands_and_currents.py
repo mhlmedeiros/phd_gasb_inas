@@ -148,7 +148,7 @@ def band_values(syst, momenta, params, eF_value = 0):
 
     return energies
 
-def band_with_line_gasb(momenta, energies, kx_max=0.25, E_min=300, E_max = 500, E_line = None):
+def band_with_line_gasb(axis, momenta, energies, kx_max=0.25, E_min=300, E_max = 500, E_line = None):
 
     """
     Função para plot da estrutura de bandas
@@ -168,8 +168,8 @@ def band_with_line_gasb(momenta, energies, kx_max=0.25, E_min=300, E_max = 500, 
     """
     momenta *= (shapes.A_STD*shapes.A0*10**(-1))**(-1) # conversion to nm^{-1}
 
-    fig = plt.figure()
-    axis = fig.add_subplot(111)
+    # fig = plt.figure()
+    # axis = fig.add_subplot(111)
     axis.plot(momenta, energies, linewidth = 1.0, color='black')
     axis.hlines(E_line, -kx_max, kx_max, linewidth = 2.0, linestyle = "--", color = "red")
     axis.grid()
@@ -179,8 +179,8 @@ def band_with_line_gasb(momenta, energies, kx_max=0.25, E_min=300, E_max = 500, 
     axis.set_ylabel(r'$\varepsilon$ [meV]')
     # fig = plt.gcf()
     # fig.set_size_inches(6, 6)
-    plt.tight_layout()
-    plt.show()
+    # plt.tight_layout()
+    # plt.show()
     return 0
 
 def bands_cont2D_and_discr(axis, cont_energies, disc_energies, momenta, kx_max=0.25, E_min=300, E_max = 500, E_line = None):
