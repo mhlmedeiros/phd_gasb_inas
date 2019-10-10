@@ -148,7 +148,10 @@ def band_values(syst, momenta, params, eF_value = 0):
 
     return energies
 
-def band_with_line_gasb(axis, momenta, energies, kx_max=0.25, E_min=300, E_max = 500, E_line = None):
+def band_with_line_gasb(axis, momenta, energies,
+                    kx_max = 0.25, E_min = 300, E_max = 500, E_line = None,
+                    color_plot = "black", linestyle_plot = "-", marker_plot = None,
+                    color_line = "red", linestyle_line = "--",label_plot = None):
 
     """
     Função para plot da estrutura de bandas
@@ -166,12 +169,22 @@ def band_with_line_gasb(axis, momenta, energies, kx_max=0.25, E_min=300, E_max =
     esse, por sua vez, tem unidade também dependente dos parâmetros
     do Hamiltoniano.
     """
-    momenta *= (shapes.A_STD*shapes.A0*10**(-1))**(-1) # conversion to nm^{-1}
+    momenta_trans = momenta * (shapes.A_STD*shapes.A0*10**(-1))**(-1) # conversion to nm^{-1}
 
     # fig = plt.figure()
     # axis = fig.add_subplot(111)
-    axis.plot(momenta, energies, linewidth = 1.0, color='black')
-    axis.hlines(E_line, -kx_max, kx_max, linewidth = 2.0, linestyle = "--", color = "red")
+    energies = np.array(energies)
+
+
+    axis.plot(momenta_trans, energies[:, 0],
+                linewidth = 1.0, color = color_plot, linestyle = linestyle_plot,
+                marker = marker_plot, markevery=1, label = label_plot)
+    axis.plot(momenta_trans, energies[:, 1:],
+                linewidth = 1.0, color = color_plot, linestyle = linestyle_plot,
+                marker = marker_plot, markevery=1)
+
+    axis.hlines(E_line, -kx_max, kx_max,
+                linewidth = 2.0, color = color_line, linestyle = linestyle_line)
     axis.grid()
     axis.set_xlim(-kx_max, kx_max)
     axis.set_ylim(E_min, E_max)
@@ -186,9 +199,9 @@ def band_with_line_gasb(axis, momenta, energies, kx_max=0.25, E_min=300, E_max =
 def bands_cont2D_and_discr(axis, cont_energies, disc_energies, momenta, kx_max=0.25, E_min=300, E_max = 500, E_line = None):
     # fig = plt.figure(figsize=(8,10))
     # axis = fig.add_subplot(111)
-    momenta *= (shapes.A_STD * shapes.A0*10**(-1))**(-1) # conversion to nm^{-1}
-    axis.plot(momenta, cont_energies, linewidth=2.5,color="blue")
-    axis.plot(momenta, disc_energies, linewidth = 0.8, color="black", linestyle="-")
+    momenta_trans = momenta * (shapes.A_STD * shapes.A0*10**(-1))**(-1) # conversion to nm^{-1}
+    axis.plot(momenta_trans, cont_energies, linewidth=2.5,color="blue")
+    axis.plot(momenta_trans, disc_energies, linewidth = 0.8, color="black", linestyle="-")
     axis.hlines(E_line, -kx_max, kx_max, linewidth = 2.0, linestyle = "--", color = "red")
     axis.grid()
     axis.set_title("(a)", fontsize=FONT_TITLES)
