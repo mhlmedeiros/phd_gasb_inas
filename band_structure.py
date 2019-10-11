@@ -16,8 +16,8 @@ def main():
     # Define the system
     ham_up       = gasb.hamiltonian_97_up()
     ham_dn       = gasb.hamiltonian_97_down()
-    syst_lead_up = gasb.just_lead_builder(ham_up)
-    syst_lead_dn = gasb.just_lead_builder(ham_dn)
+    syst_lead_up = gasb.just_lead_builder(ham_up, symmetry = 1)
+    syst_lead_dn = gasb.just_lead_builder(ham_dn, symmetry = 1)
 
     ham_total  = gasb.hamiltonian_97_k_plus()
     syst_total = gasb.just_lead_builder(ham_total)

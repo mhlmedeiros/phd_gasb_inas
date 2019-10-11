@@ -257,7 +257,7 @@ def hamiltonian_103_k_plus():
     This function produces the hamiltonian for the system with
     width of 103 Å.
     '''
-    kw_sympify = kwant.continuum.sympify
+    sympify = kwant.continuum.sympify
 
     subs = {
         'H_11' : 'EC + (k_x + k_y) * AlphaC(eF, A6, B6, C6) + (k_x**2 + k_y**2) * GammaC(eF, A2, B2) ',
@@ -282,7 +282,7 @@ def hamiltonian_103_k_plus():
 
 
 
-    hamiltonian = kw_sympify("""
+    hamiltonian = sympify("""
            13.6 * 1000 *[
            [H_11, H_12,    0,    0,    0, H_16],
            [H_21, H_22, H_23,    0,    0,    0],
@@ -308,7 +308,7 @@ def hamiltonian_103_k_minus():
     This function produces the hamiltonian for the system with
     width of 103 Å.
     '''
-    kw_sympify = kwant.continuum.sympify
+    sympify = kwant.continuum.sympify
     subs = {
         'H_11' : 'EC + (k_x + k_y) * AlphaC(eF, A6, B6, C6) + (k_x**2 + k_y**2) * GammaC(eF, A2, B2) ',
         'H_12' : '+1j * (k_x - 1j*k_y) * Px(eF, A5, B5, C5)',
@@ -329,7 +329,7 @@ def hamiltonian_103_k_minus():
         'H_65' : '+1j * DeltaR(eF, A1)',
         'H_66' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) - DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) - AlphaV(eF, A7, B7, C7) * (k_x + k_y)'
         }
-    hamiltonian = kw_sympify("""
+    hamiltonian = sympify("""
            13.6 * 1000 *[
            [H_11, H_12,    0,    0,    0, H_16],
            [H_21, H_22, H_23,    0,    0,    0],
@@ -365,7 +365,7 @@ def hamiltonian_103_up():
         'H_33' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) - DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) + AlphaV(eF, A7, B7, C7) * (k_x + k_y)'
         }
 
-    hamiltonian = kw_sympify("""
+    hamiltonian = sympify("""
            13.6 * 1000 *[
            [H_11, H_12,    0],
            [H_21, H_22, H_23],
@@ -400,7 +400,7 @@ def hamiltonian_103_down():
 
 
 
-    hamiltonian = kw_sympify("""
+    hamiltonian = sympify("""
            13.6 * 1000 *[
            [H_44, H_45,    0],
            [H_54, H_55, H_56],
@@ -637,7 +637,7 @@ def system_builder(hamiltonian, centralShape, a = A_STD):
     syst = syst.finalized()
     return syst
 
-def just_lead_builder(hamiltonian, W = W_STD, a = A_STD):
+def just_lead_builder(hamiltonian, W = W_STD, a = A_STD, symmetry=-1):
 
     template = kwant.continuum.discretize(hamiltonian, grid=a)
 
@@ -645,7 +645,7 @@ def just_lead_builder(hamiltonian, W = W_STD, a = A_STD):
         (x, y) = site.pos
         return (-W/2 < y < W/2)
 
-    lead = kwant.Builder(kwant.TranslationalSymmetry([-a, 0]))
+    lead = kwant.Builder(kwant.TranslationalSymmetry([symmetry * a, 0]))
     lead.fill(template, lead_shape, (0, 0))
 
     return lead.finalized()
