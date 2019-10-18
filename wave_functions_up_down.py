@@ -33,7 +33,7 @@ def map_density(ax, syst, psi_sqrd, colormap = "Reds"):
     # plt.show()
     return 0
 
-def density_in_line(syst, states, Op = np.eye(6)):
+def density_in_line(syst, states, Op = np.eye(3)):
     y_stack = []
     def line(site):
         (x, y) = site.pos
@@ -56,7 +56,8 @@ def plot_dos_in_line(dos_line):
     plt.show()
 
 def normalize(dos_in_line):
-    return sum(dos_in_line)/max(sum(dos_in_line))
+    # return sum(dos_in_line)/max(sum(dos_in_line))
+    return sum(dos_in_line)
 
 def print_info_dos_line(y_values, dos_in_line):
     print(80*"=")
@@ -64,57 +65,57 @@ def print_info_dos_line(y_values, dos_in_line):
     print("Size of y_both: ", y_values.shape)
     print("y_both:\n", y_values)
 
-
+# def calcula_density():
+#     hamiltonian_up = gasb.hamiltonian_103_up()
+#     centralShape = shapes.Rect()
+#     syst_up = gasb.system_builder(hamiltonian_up, centralShape)
 
 def main():
     # Define the system:
-    hamiltonian = gasb.hamiltonian_97_k_plus()
+    hamiltonian_up = gasb.hamiltonian_97_up()
+    hamiltonian_dn = gasb.hamiltonian_97_up_y_inv()
     centralShape = shapes.Rect()
-    syst = gasb.system_builder(hamiltonian, centralShape)
-
+    syst_up = gasb.system_builder(hamiltonian_up, centralShape)
+    syst_dn = gasb.system_builder(hamiltonian_dn, centralShape)
 
     # Calculate the wave_function:
     energia = 440
     parametros = gasb.params_97
-    parametros['Eta3'] = 0
-    parametros['Eta2'] = 0
-    parametros['eF']   = 50
-    wf = kwant.wave_function(syst, energy=energia, params=parametros)
-    modes_left  = wf(0)
-    modes_right = wf(1)
-    # modes_total = np.vstack((wf(0), wf(1)))
+    parametros['eF'] = 50
+    wf_up = kwant.wave_function(syst_up, energy=energia, params=parametros)
+    wf_dn = kwant.wave_function(syst_dn, energy=energia, params=parametros)
+    modes_up = wf_up(0) # from left lead
+    modes_dn = wf_dn(0) # from left lead
 
 
     # Calculate the density:
-    sigma_z = tinyarray.array([[1,0],[0,-1]])
-    spin_proj= np.kron(sigma_z, np.eye(3))
-    identity = np.eye(6)
-    rho = kwant.operator.Density(syst, spin_proj)
-    psi_left = sum(rho(p) for p in modes_left)
-    psi_right = sum(rho(p) for p in modes_right)
+    rho_up = kwant.operator.Density(syst_up)
+    rho_dn = kwant.operator.Density(syst_dn)
+    psi_up = sum(rho_up(p) for p in modes_up)
+    psi_dn = sum(rho_dn(p) for p in modes_dn)
 
 
     # Calculate dos in a line
-    dos_in_line_from_left, y_values_left  = density_in_line(syst, modes_left, identity)
-    dos_in_line_from_right, y_values_right = density_in_line(syst, modes_right, identity)
+    dos_in_line_up, y_values_up = density_in_line(syst_up, modes_up)
+    dos_in_line_dn, y_values_dn = density_in_line(syst_dn, modes_dn)
 
 
     # Plot the results:
-    fig, ax = plt.subplots(2,2,figsize=(14,6))
-    y_values_left = y_values_left * (shapes.A0 / 10) # conversion to nm^{-1}
-    y_values_right = y_values_right * (shapes.A0 / 10) # conversion to nm^{-1}
+    fig, ax = plt.subplots(2, 2, figsize = (14,6))
+    y_values_up = y_values_up * (shapes.A0 / 10) # conversion to nm^{-1}
+    y_values_dn = y_values_dn * (shapes.A0 / 10) # conversion to nm^{-1}
     min_line, max_line = -0.7 * shapes.L_STD, 0.7 * shapes.L_STD
 
-    map_density(ax[0][0], syst, psi_left, colormap = "seismic")
+    map_density(ax[0][0], syst_up, psi_up, colormap = "Reds")
     ax[0][0].vlines(0, min_line, max_line, linestyle = "--")
-    ax[0][0].set_title("left lead")
-    map_density(ax[1][0], syst, psi_right, colormap = "seismic")
+    ax[0][0].set_title("spin up")
+    map_density(ax[1][0], syst_dn, psi_dn, colormap = "Blues")
     ax[1][0].vlines(0, min_line, max_line, linestyle = "--")
-    ax[1][0].set_title("right lead")
+    ax[1][0].set_title("spin down")
 
-    ax[0][1].plot(y_values_left, normalize(dos_in_line_from_left),
+    ax[0][1].plot(y_values_up, normalize(dos_in_line_up),
                     marker = ".", markersize = 2.5, linestyle = "-" )
-    ax[1][1].plot(y_values_right, normalize(dos_in_line_from_right),
+    ax[1][1].plot(y_values_dn, normalize(dos_in_line_dn),
                     marker = ".", markersize = 2.5, linestyle = "-" )
     plt.tight_layout()
     plt.show()

@@ -55,6 +55,9 @@ def edit_axis(axis, spin):
         axis.set_xlabel(r'$x$ [nm]',fontsize=FONT_LABELS)
         axis.set_ylabel(r'$y$ [nm]',fontsize=FONT_LABELS)
 
+def trans_momenta(k_x):
+    return k_x * (shapes.A_STD*shapes.A0*10**(-1))**(-1) # conversion from nm^{-1}
+
 def current_spin(axis, syst, parameters, eF_value = 0, energy = 428, lead_index=0, spin="up", colormap="Reds"):
     #Copiado para phd
     """
@@ -175,13 +178,13 @@ def band_with_line_gasb(axis, momenta, energies,
     # axis = fig.add_subplot(111)
     energies = np.array(energies)
 
-
+    # The first first sub-band is labeled and it will represent the bandstructure
     axis.plot(momenta_trans, energies[:, 0],
                 linewidth = 1.0, color = color_plot, linestyle = linestyle_plot,
-                marker = marker_plot, markevery=1, label = label_plot)
+                marker = marker_plot, markevery=20, label = label_plot)
     axis.plot(momenta_trans, energies[:, 1:],
                 linewidth = 1.0, color = color_plot, linestyle = linestyle_plot,
-                marker = marker_plot, markevery=1)
+                marker = marker_plot, markevery=20)
 
     axis.hlines(E_line, -kx_max, kx_max,
                 linewidth = 2.0, color = color_line, linestyle = linestyle_line)

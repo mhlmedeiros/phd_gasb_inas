@@ -205,6 +205,36 @@ def hamiltonian_97_up():
 
     return hamiltonian
 
+def hamiltonian_97_up_y_inv():
+    '''
+    Hamiltonian given by Guilherme:
+
+    This function produces the first block of the hamiltonian for the system
+    with width of 97 Å. Note that we've adopted Eta3 == Eta2 == 0 here in order to
+    uncouple the superior and inferior blocks of the original Hamiltonian.
+
+    We've also considered the version "plus" of the Hamiltonian.
+    '''
+    sympify = kwant.continuum.sympify
+
+    subs = {
+    'H_11' : 'EC + (k_x**2 + k_y**2) * GammaC + AlphaC(eF, A3, B3) * (k_x - k_y)',
+    'H_12' : '+1j * (k_x - 1j * k_y) * Px(P)',
+    'H_21' : '-1j * (k_x + 1j * k_y) * Px(P)',
+    'H_22' : 'EV + DeltaE(eF, A2) + (k_x**2 + k_y**2) * (GammaV + DeltaGamma(eF,A1,B1,C1)) + AlphaV(eF,A4,B4,C4) * (k_x - k_y)',
+    'H_33' : 'EV - DeltaE(eF, A2) + (k_x**2 + k_y**2) * (GammaV - DeltaGamma(eF,A1,B1,C1)) + AlphaV(eF,A4,B4,C4) * (k_x - k_y)'
+    }
+
+    hamiltonian = sympify("""
+       13.6 * 1000 *[
+       [H_11, H_12,    0],
+       [H_21, H_22,    0],
+       [   0,    0, H_33]
+       ]
+       """, locals = subs)
+
+    return hamiltonian
+
 def hamiltonian_97_down():
 
     """
@@ -638,7 +668,11 @@ def system_builder(hamiltonian, centralShape, a = A_STD):
     return syst
 
 def just_lead_builder(hamiltonian, W = W_STD, a = A_STD, symmetry=-1):
+    """
+    Generates a finalized lead to obtain the band structure.
 
+        * symmetry :: Int == 1 (for right lead) or -1 (for a lead on the left)
+    """
     template = kwant.continuum.discretize(hamiltonian, grid=a)
 
     def lead_shape(site):
