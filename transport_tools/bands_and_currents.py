@@ -58,6 +58,20 @@ def edit_axis(axis, spin):
 def trans_momenta(k_x):
     return k_x * (shapes.A_STD*shapes.A0*10**(-1))**(-1) # conversion from nm^{-1}
 
+def current_density(axis, syst, parameters, eF_value = 0, energy = 428, lead_index=0, colormap="Reds"):
+    parameters["eF"] = eF_value
+
+    wf = kwant.wave_function(syst, energy=energy, params=parameters)
+    J_spin = kwant.operator.Current(syst)
+
+    current_spin = sum(J_spin(psi, params = parameters) for psi in wf(lead_index))
+    # kwant.plotter.current(syst, current_spin, cmap = colormap, colorbar = False, show = False, ax=axis, density=1/9)
+    kwant.plotter.current(syst, current_spin, cmap = colormap, colorbar = False, show = False, ax=axis)
+    edit_axis(axis, "none") # change units to nm
+    axis.set_title(" ")
+
+    return 0
+
 def current_spin(axis, syst, parameters, eF_value = 0, energy = 428, lead_index=0, spin="up", colormap="Reds"):
     #Copiado para phd
     """

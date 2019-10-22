@@ -619,8 +619,28 @@ def hamiltonian_110_down():
     return hamiltonian
 
 
+# Metalic Leads:
+def free_ham(norbs):
+    sympify = kwant.continuum.sympify
+    subs = {"K":"GammaLead * (k_x**2 + k_y**2)", "V": "ShiftLead", "orbs" : norbs}
+    H = sympify("13.6 * 1000 * identity(orbs) * (K + V)", locals=subs)
+    return H
+
+def lead_metalica(hamiltonian, W = W_STD, a = A_STD):
+
+    template = kwant.continuum.discretize(hamiltonian, grid = a)
+
+    def lead_shape(site):
+        (x, y) = site.pos
+        return (-W/2 < y < W/2)
+
+    lead = kwant.Builder(kwant.TranslationalSymmetry([-a, 0]))
+    lead.fill(template, lead_shape, (-a, 0))
+
+    return lead
+
 # Builder:
-def system_builder(hamiltonian, centralShape, a = A_STD):
+def system_builder(hamiltonian, centralShape, norbs = 6, a = A_STD):
     '''
     Here we define the system's geometry as a rectangular slab attached with leads
     of same width.
@@ -651,15 +671,16 @@ def system_builder(hamiltonian, centralShape, a = A_STD):
     #     (x, y) = site.pos
     #     return (-W/2 < y < W/2 and -L/2 < x < L/2)
 
-    def lead_shape(site):
-        (x, y) = site.pos
-        return (-centralShape.Wmax/2 < y < centralShape.Wmax/2)
+    # def lead_shape(site):
+    #     (x, y) = site.pos
+    #     return (-centralShape.Wmax/2 < y < centralShape.Wmax/2)
 
     syst = kwant.Builder()
     syst.fill(template, centralShape, (0, 0))
 
-    lead = kwant.Builder(kwant.TranslationalSymmetry([-a, 0]))
-    lead.fill(template, lead_shape, (-centralShape.Lmax, 0))
+    lead_ham = free_ham(norbs)
+    lead = lead_metalica(lead_ham, W = centralShape.Wmax, a = A_STD)
+    # lead.fill(template, lead_shape, (-centralShape.Lmax, 0))
 
     syst.attach_lead(lead)
     syst.attach_lead(lead.reversed())
