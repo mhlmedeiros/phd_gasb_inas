@@ -26,18 +26,14 @@ from transport_tools import bands_and_currents as tools
 
 def map_density(ax, syst, psi_sqrd, colormap = "Reds"):
     # Plot the results:
-    # fig, ax = plt.subplots(1,1)
     kwant.plotter.map(syst, psi_sqrd, ax = ax, fig_size = (7,3), cmap=colormap)
     tools.edit_axis(ax,'dens')
-    # plt.tight_layout()
-    # plt.show()
     return 0
 
 def density_in_line(syst, states, Op = np.eye(6)):
     y_stack = []
     def line(site):
         (x, y) = site.pos
-        # half   = shapes.L_STD/2
         half   = 0
         delta  = shapes.A_STD
         ans = abs(x - half) < delta
@@ -56,6 +52,7 @@ def plot_dos_in_line(dos_line):
     plt.show()
 
 def normalize(dos_in_line):
+    # return sum(dos_in_line)
     return sum(dos_in_line)/max(sum(dos_in_line))
 
 def print_info_dos_line(y_values, dos_in_line):
@@ -68,9 +65,11 @@ def print_info_dos_line(y_values, dos_in_line):
 
 def main():
     # Define the system:
-    hamiltonian = gasb.hamiltonian_97_k_plus()
+    # hamiltonian = gasb.hamiltonian_97_k_plus()
+    hamiltonian = gasb.free_ham(6)
+    lead_ham = gasb.free_ham(6)
     centralShape = shapes.Rect()
-    syst = gasb.system_builder(hamiltonian, centralShape)
+    syst = gasb.system_builder(hamiltonian, lead_ham, centralShape)
 
 
     # Calculate the wave_function:
@@ -79,6 +78,8 @@ def main():
     parametros['Eta3'] = 0
     parametros['Eta2'] = 0
     parametros['eF']   = 50
+    parametros = dict(GammaLead = 1.5 * parametros["GammaC"],
+                      ShiftLead = -0.00, **parametros )
     wf = kwant.wave_function(syst, energy=energia, params=parametros)
     modes_left  = wf(0)
     modes_right = wf(1)
@@ -89,7 +90,7 @@ def main():
     sigma_z = tinyarray.array([[1,0],[0,-1]])
     spin_proj= np.kron(sigma_z, np.eye(3))
     identity = np.eye(6)
-    rho = kwant.operator.Density(syst, spin_proj)
+    rho = kwant.operator.Density(syst, identity)
     psi_left = sum(rho(p) for p in modes_left)
     psi_right = sum(rho(p) for p in modes_right)
 
@@ -105,10 +106,10 @@ def main():
     y_values_right = y_values_right * (shapes.A0 / 10) # conversion to nm^{-1}
     min_line, max_line = -0.7 * shapes.L_STD, 0.7 * shapes.L_STD
 
-    map_density(ax[0][0], syst, psi_left, colormap = "seismic")
+    map_density(ax[0][0], syst, psi_left, colormap = "Oranges")
     ax[0][0].vlines(0, min_line, max_line, linestyle = "--")
     ax[0][0].set_title("left lead")
-    map_density(ax[1][0], syst, psi_right, colormap = "seismic")
+    map_density(ax[1][0], syst, psi_right, colormap = "Oranges")
     ax[1][0].vlines(0, min_line, max_line, linestyle = "--")
     ax[1][0].set_title("right lead")
 

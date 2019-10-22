@@ -619,11 +619,30 @@ def hamiltonian_110_down():
     return hamiltonian
 
 
-# Metalic Leads:
+# METALLIC LEAD:
+
+#  TO DO: implement strategy for lead's hamiltonian
+#  IDEA:  To use the same system hamiltonian but with a off-set
+#  thus we'll can set the bulk region of the spectrum as source and drain.
+
 def free_ham(norbs):
     sympify = kwant.continuum.sympify
     subs = {"K":"GammaLead * (k_x**2 + k_y**2)", "V": "ShiftLead", "orbs" : norbs}
     H = sympify("13.6 * 1000 * identity(orbs) * (K + V)", locals=subs)
+    return H
+
+def semi_metal_ham_3x3():
+    sympify = kwant.continuum.sympify
+    subs = {
+        "KC" : "GammaLead * (k_x**2 + k_y**2)",
+        "KV" : "-GammaLead * (k_x**2 + k_y**2)",
+        "V"  : "ShiftLead"}
+    H = sympify("""
+    13.6 * 1000 * [
+    [KC + V,        0,      0],
+    [       0, KC + V,      0],
+    [       0,      0, KV + V]
+    ]""", locals=subs)
     return H
 
 def lead_metalica(hamiltonian, W = W_STD, a = A_STD):
@@ -640,7 +659,7 @@ def lead_metalica(hamiltonian, W = W_STD, a = A_STD):
     return lead
 
 # Builder:
-def system_builder(hamiltonian, centralShape, norbs = 6, a = A_STD):
+def system_builder(hamiltonian, lead_ham, centralShape, a = A_STD):
     '''
     Here we define the system's geometry as a rectangular slab attached with leads
     of same width.
@@ -678,7 +697,8 @@ def system_builder(hamiltonian, centralShape, norbs = 6, a = A_STD):
     syst = kwant.Builder()
     syst.fill(template, centralShape, (0, 0))
 
-    lead_ham = free_ham(norbs)
+    # lead_ham = free_ham(norbs)
+    # lead_ham = semi_metal_ham_3x3()
     lead = lead_metalica(lead_ham, W = centralShape.Wmax, a = A_STD)
     # lead.fill(template, lead_shape, (-centralShape.Lmax, 0))
 
