@@ -92,7 +92,7 @@ def γVGeral(x, *args):
 
 # Hamiltonians for the systems :
 
-def hamiltonian_97_k_plus():
+def hamiltonian_97_k_plus(V_shift=0):
     '''
     Hamiltonian given by Guilherme:
 
@@ -115,7 +115,8 @@ def hamiltonian_97_k_plus():
     'H_54' : '-1j * (k_x + 1j * k_y) * Px(P)',
     'H_55' : 'EV + DeltaE(eF,A2) + (k_x**2 + k_y**2) * (GammaV + DeltaGamma(eF,A1,B1,C1)) - AlphaV(eF,A4,B4,C4) * (k_x + k_y)',
     'H_61' : '-(k_x**2 - k_y**2) * Eta2 + 1j * k_x * k_y * Eta3',
-    'H_66' : 'EV - DeltaE(eF,A2) + (k_x**2 + k_y**2) * (GammaV - DeltaGamma(eF,A1,B1,C1)) - AlphaV(eF,A4,B4,C4) * (k_x + k_y)'
+    'H_66' : 'EV - DeltaE(eF,A2) + (k_x**2 + k_y**2) * (GammaV - DeltaGamma(eF,A1,B1,C1)) - AlphaV(eF,A4,B4,C4) * (k_x + k_y)',
+    'V'    : V_shift
     }
 
 
@@ -128,12 +129,12 @@ def hamiltonian_97_k_plus():
        [   0,    0, H_43, H_44, H_45,    0],
        [   0,    0,    0, H_54, H_55,    0],
        [ H_61,   0,    0,    0,    0, H_66]
-       ]
+       ] + V * identity(6)
        """, locals = subs)
 
     return hamiltonian
 
-def hamiltonian_97_k_minus():
+def hamiltonian_97_k_minus(V_shift=0):
     '''
     Hamiltonian given by Guilherme:
 
@@ -156,7 +157,8 @@ def hamiltonian_97_k_minus():
     'H_54' : '-1j * (k_x - 1j * k_y) * Px(P)',
     'H_55' : 'EV + DeltaE(eF,A2) + (k_x**2 + k_y**2) * (GammaV + DeltaGamma(eF,A1,B1,C1)) - AlphaV(eF,A4,B4,C4) * (k_x + k_y)',
     'H_61' : '-(k_x**2 - k_y**2) * Eta2 + 1j * k_x * k_y * Eta3',
-    'H_66' : 'EV - DeltaE(eF,A2) + (k_x**2 + k_y**2) * (GammaV - DeltaGamma(eF,A1,B1,C1)) - AlphaV(eF,A4,B4,C4) * (k_x + k_y)'
+    'H_66' : 'EV - DeltaE(eF,A2) + (k_x**2 + k_y**2) * (GammaV - DeltaGamma(eF,A1,B1,C1)) - AlphaV(eF,A4,B4,C4) * (k_x + k_y)',
+    'V'    : V_shift
     }
 
 
@@ -175,7 +177,7 @@ def hamiltonian_97_k_minus():
     return hamiltonian
 
 
-def hamiltonian_97_up():
+def hamiltonian_97_up(V_shift=0):
     '''
     Hamiltonian given by Guilherme:
 
@@ -192,7 +194,8 @@ def hamiltonian_97_up():
     'H_12' : '+1j * (k_x + 1j * k_y) * Px(P)',
     'H_21' : '-1j * (k_x - 1j * k_y) * Px(P)',
     'H_22' : 'EV + DeltaE(eF, A2) + (k_x**2 + k_y**2) * (GammaV + DeltaGamma(eF,A1,B1,C1)) + AlphaV(eF,A4,B4,C4) * (k_x + k_y)',
-    'H_33' : 'EV - DeltaE(eF, A2) + (k_x**2 + k_y**2) * (GammaV - DeltaGamma(eF,A1,B1,C1)) + AlphaV(eF,A4,B4,C4) * (k_x + k_y)'
+    'H_33' : 'EV - DeltaE(eF, A2) + (k_x**2 + k_y**2) * (GammaV - DeltaGamma(eF,A1,B1,C1)) + AlphaV(eF,A4,B4,C4) * (k_x + k_y)',
+    'V'    : V_shift
     }
 
     hamiltonian = sympify("""
@@ -200,12 +203,12 @@ def hamiltonian_97_up():
        [H_11, H_12,    0],
        [H_21, H_22,    0],
        [   0,    0, H_33]
-       ]
+       ] + V * identity(3)
        """, locals = subs)
 
     return hamiltonian
 
-def hamiltonian_97_up_y_inv():
+def hamiltonian_97_up_y_inv(V_shift=0):
     '''
     Hamiltonian given by Guilherme:
 
@@ -222,7 +225,8 @@ def hamiltonian_97_up_y_inv():
     'H_12' : '+1j * (k_x - 1j * k_y) * Px(P)',
     'H_21' : '-1j * (k_x + 1j * k_y) * Px(P)',
     'H_22' : 'EV + DeltaE(eF, A2) + (k_x**2 + k_y**2) * (GammaV + DeltaGamma(eF,A1,B1,C1)) + AlphaV(eF,A4,B4,C4) * (k_x - k_y)',
-    'H_33' : 'EV - DeltaE(eF, A2) + (k_x**2 + k_y**2) * (GammaV - DeltaGamma(eF,A1,B1,C1)) + AlphaV(eF,A4,B4,C4) * (k_x - k_y)'
+    'H_33' : 'EV - DeltaE(eF, A2) + (k_x**2 + k_y**2) * (GammaV - DeltaGamma(eF,A1,B1,C1)) + AlphaV(eF,A4,B4,C4) * (k_x - k_y)',
+    'V'    : V_shift
     }
 
     hamiltonian = sympify("""
@@ -230,12 +234,12 @@ def hamiltonian_97_up_y_inv():
        [H_11, H_12,    0],
        [H_21, H_22,    0],
        [   0,    0, H_33]
-       ]
+       ] + V * identity(3)
        """, locals = subs)
 
     return hamiltonian
 
-def hamiltonian_97_down():
+def hamiltonian_97_down(V_shift=0):
 
     """
     Hamiltonian given by Guilherme:
@@ -253,7 +257,8 @@ def hamiltonian_97_down():
     'H_45' : '+1j * (k_x - 1j * k_y) * Px(P)',
     'H_54' : '-1j * (k_x + 1j * k_y) * Px(P)',
     'H_55' : 'EV + DeltaE(eF,A2) + (k_x**2 + k_y**2) * (GammaV + DeltaGamma(eF,A1,B1,C1)) - AlphaV(eF,A4,B4,C4) * (k_x + k_y)',
-    'H_66' : 'EV - DeltaE(eF,A2) + (k_x**2 + k_y**2) * (GammaV - DeltaGamma(eF,A1,B1,C1)) - AlphaV(eF,A4,B4,C4) * (k_x + k_y)'
+    'H_66' : 'EV - DeltaE(eF,A2) + (k_x**2 + k_y**2) * (GammaV - DeltaGamma(eF,A1,B1,C1)) - AlphaV(eF,A4,B4,C4) * (k_x + k_y)',
+    'V'    : V_shift
     }
 
 
@@ -263,13 +268,13 @@ def hamiltonian_97_down():
        [H_44, H_45,    0],
        [H_54, H_55,    0],
        [   0,    0, H_66]
-       ]
+       ] + V * identity(3)
        """, locals = subs)
 
     return hamiltonian
 
 
-def hamiltonian_103_k_plus():
+def hamiltonian_103_k_plus(V_shift=0):
     '''
     Hamiltonian given by Guilherme with modifications:
 
@@ -307,7 +312,8 @@ def hamiltonian_103_k_plus():
         'H_56' : '-1j * DeltaR(eF, A1)',
         'H_61' : '-(k_x**2 - k_y**2) * Eta2 + 1j * k_x * k_y * Eta3',
         'H_65' : '+1j * DeltaR(eF, A1)',
-        'H_66' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) - DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) - AlphaV(eF, A7, B7, C7) * (k_x + k_y)'
+        'H_66' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) - DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) - AlphaV(eF, A7, B7, C7) * (k_x + k_y)',
+        'V'    : V_shift
     }
 
 
@@ -325,7 +331,7 @@ def hamiltonian_103_k_plus():
 
     return hamiltonian
 
-def hamiltonian_103_k_minus():
+def hamiltonian_103_k_minus(V_shift=0):
     '''
     Hamiltonian given by Guilherme with some modifications:
 
@@ -357,7 +363,8 @@ def hamiltonian_103_k_minus():
         'H_56' : '-1j * DeltaR(eF, A1)',
         'H_61' : '-(k_x**2 - k_y**2) * Eta2 + 1j * k_x * k_y * Eta3',
         'H_65' : '+1j * DeltaR(eF, A1)',
-        'H_66' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) - DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) - AlphaV(eF, A7, B7, C7) * (k_x + k_y)'
+        'H_66' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) - DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) - AlphaV(eF, A7, B7, C7) * (k_x + k_y)',
+        'V'    : V_shift
         }
     hamiltonian = sympify("""
            13.6 * 1000 *[
@@ -367,13 +374,13 @@ def hamiltonian_103_k_minus():
            [   0,    0, H_43, H_44, H_45,    0],
            [   0,    0,    0, H_54, H_55, H_56],
            [H_61,    0,    0,    0, H_65, H_66]
-           ]
+           ] + V * identity(6)
     """, locals = subs)
 
     return hamiltonian
 
 
-def hamiltonian_103_up():
+def hamiltonian_103_up(V_shift=0):
     '''
     Hamiltonian given by Guilherme:
 
@@ -392,7 +399,8 @@ def hamiltonian_103_up():
         'H_22' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) + DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) + AlphaV(eF, A7, B7, C7) * (k_x + k_y)',
         'H_23' : '+1j * DeltaR(eF, A1)',
         'H_32' : '-1j * DeltaR(eF, A1)',
-        'H_33' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) - DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) + AlphaV(eF, A7, B7, C7) * (k_x + k_y)'
+        'H_33' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) - DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) + AlphaV(eF, A7, B7, C7) * (k_x + k_y)',
+        'V'    : V_shift
         }
 
     hamiltonian = sympify("""
@@ -400,12 +408,12 @@ def hamiltonian_103_up():
            [H_11, H_12,    0],
            [H_21, H_22, H_23],
            [   0, H_32, H_33]
-           ]
+           ] + V * identity(3)
     """, locals = subs)
 
     return hamiltonian
 
-def hamiltonian_103_down():
+def hamiltonian_103_down(V_shift=0):
 
     """
     Hamiltonian given by Guilherme:
@@ -425,7 +433,8 @@ def hamiltonian_103_down():
         'H_55' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) + DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) - AlphaV(eF, A7, B7, C7) * (k_x + k_y)',
         'H_56' : '-1j * DeltaR(eF, A1)',
         'H_65' : '+1j * DeltaR(eF, A1)',
-        'H_66' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) - DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) - AlphaV(eF, A7, B7, C7) * (k_x + k_y)'
+        'H_66' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) - DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) - AlphaV(eF, A7, B7, C7) * (k_x + k_y)',
+        'V'    : V_shift
     }
 
 
@@ -435,13 +444,13 @@ def hamiltonian_103_down():
            [H_44, H_45,    0],
            [H_54, H_55, H_56],
            [   0, H_65, H_66]
-           ]
+           ] + V * identity(3)
     """, locals = subs)
 
     return hamiltonian
 
 
-def hamiltonian_110_k_plus():
+def hamiltonian_110_k_plus(V_shift=0):
     '''
     Hamiltonian given by Guilherme with modifications:
 
@@ -479,7 +488,8 @@ def hamiltonian_110_k_plus():
     'H_56' : '-1j * DeltaR(eF, A1)',
     'H_61' : '-(k_x**2 - k_y**2) * Eta2 + 1j * k_x * k_y * Eta3',
     'H_65' : '+1j * DeltaR(eF, A1)',
-    'H_66' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) - DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) - AlphaV(eF, A6, B6, C6) * (k_x + k_y)'
+    'H_66' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) - DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) - AlphaV(eF, A6, B6, C6) * (k_x + k_y)',
+    'V'    : V_shift
     }
 
 
@@ -492,12 +502,12 @@ def hamiltonian_110_k_plus():
        [   0,    0, H_43, H_44, H_45,    0],
        [   0,    0,    0, H_54, H_55, H_56],
        [ H_61,   0,    0,    0, H_65, H_66]
-       ]
+       ] + V * identity(6)
        """, locals = subs)
 
     return hamiltonian
 
-def hamiltonian_110_k_minus():
+def hamiltonian_110_k_minus(V_shift=0):
     '''
     Hamiltonian given by Guilherme with modifications:
 
@@ -530,7 +540,8 @@ def hamiltonian_110_k_minus():
     'H_56' : '-1j * DeltaR(eF, A1)',
     'H_61' : '-(k_x**2 - k_y**2) * Eta2 + 1j * k_x * k_y * Eta3',
     'H_65' : '+1j * DeltaR(eF, A1)',
-    'H_66' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) - DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) - AlphaV(eF, A6, B6, C6) * (k_x + k_y)'
+    'H_66' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) - DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) - AlphaV(eF, A6, B6, C6) * (k_x + k_y)',
+    'V'    : V_shift
     }
 
 
@@ -543,13 +554,13 @@ def hamiltonian_110_k_minus():
        [   0,    0, H_43, H_44, H_45,    0],
        [   0,    0,    0, H_54, H_55, H_56],
        [ H_61,   0,    0,    0, H_65, H_66]
-       ]
+       ] + V * identity(6)
        """, locals = subs)
 
     return hamiltonian
 
 
-def hamiltonian_110_up():
+def hamiltonian_110_up(V_shift=0):
     '''
     Hamiltonian given by Guilherme:
 
@@ -568,7 +579,8 @@ def hamiltonian_110_up():
     'H_22' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) + DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) + AlphaV(eF, A6, B6, C6) * (k_x + k_y)',
     'H_23' : '+1j * DeltaR(eF, A1)',
     'H_32' : '-1j * DeltaR(eF, A1)',
-    'H_33' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) - DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) + AlphaV(eF, A6, B6, C6) * (k_x + k_y)'
+    'H_33' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) - DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) + AlphaV(eF, A6, B6, C6) * (k_x + k_y)',
+    'V'    : V_shift
     }
 
 
@@ -578,12 +590,12 @@ def hamiltonian_110_up():
        [H_11, H_12,    0],
        [H_21, H_22, H_23],
        [   0, H_32, H_33]
-       ]
+       ] + V * identity(3)
        """, locals = subs)
 
     return hamiltonian
 
-def hamiltonian_110_down():
+def hamiltonian_110_down(V_shift=0):
 
     """
     Hamiltonian given by Guilherme:
@@ -603,7 +615,8 @@ def hamiltonian_110_down():
     'H_55' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) + DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) - AlphaV(eF, A6, B6, C6) * (k_x + k_y)',
     'H_56' : '-1j * DeltaR(eF, A1)',
     'H_65' : '+1j * DeltaR(eF, A1)',
-    'H_66' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) - DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) - AlphaV(eF, A6, B6, C6) * (k_x + k_y)'
+    'H_66' : 'EV + (k_x**2 + k_y**2) * (GammaV(eF, A3, B3, C3) - DeltaGamma(eF,A4,B4,C4,D4,E4,F4)) - AlphaV(eF, A6, B6, C6) * (k_x + k_y)',
+    'V'    : V_shift
     }
 
 
@@ -613,7 +626,7 @@ def hamiltonian_110_down():
        [H_44, H_45,    0],
        [H_54, H_55, H_56],
        [   0, H_65, H_66]
-       ]
+       ] + V * identity(3)
        """, locals = subs)
 
     return hamiltonian
@@ -627,8 +640,8 @@ def hamiltonian_110_down():
 
 def free_ham(norbs):
     sympify = kwant.continuum.sympify
-    subs = {"K":"GammaLead * (k_x**2 + k_y**2)", "V": "ShiftLead", "orbs" : norbs}
-    H = sympify("13.6 * 1000 * identity(orbs) * (K + V)", locals=subs)
+    subs = {"K":"GammaLead * (k_x**2 + k_y**2)", "orbs" : norbs}
+    H = sympify("13.6 * 1000 * identity(orbs) * K + identity(orbs) * V", locals=subs)
     return H
 
 def semi_metal_ham_3x3():

@@ -26,7 +26,8 @@ from transport_tools import bands_and_currents as tools
 
 def map_density(ax, syst, psi_sqrd, colormap = "Reds"):
     # Plot the results:
-    kwant.plotter.map(syst, psi_sqrd, ax = ax, fig_size = (7,3), cmap=colormap)
+    # print(max(psi_sqrd))
+    kwant.plotter.map(syst, psi_sqrd, ax = ax, fig_size = (7,3), cmap = colormap, vmax = 0.99*max(psi_sqrd))
     tools.edit_axis(ax,'dens')
     return 0
 
@@ -66,30 +67,29 @@ def print_info_dos_line(y_values, dos_in_line):
 def main():
     # Define the system:
     # hamiltonian = gasb.hamiltonian_97_k_plus()
-    hamiltonian = gasb.free_ham(6)
-    lead_ham = gasb.free_ham(6)
+    hamiltonian = gasb.hamiltonian_97_up()
+    lead_ham = gasb.hamiltonian_97_up(-100)
     centralShape = shapes.Rect()
     syst = gasb.system_builder(hamiltonian, lead_ham, centralShape)
 
 
     # Calculate the wave_function:
-    energia = 440
+    energia = 442
     parametros = gasb.params_97
     parametros['Eta3'] = 0
     parametros['Eta2'] = 0
-    parametros['eF']   = 50
-    parametros = dict(GammaLead = 1.5 * parametros["GammaC"],
-                      ShiftLead = -0.00, **parametros )
-    wf = kwant.wave_function(syst, energy=energia, params=parametros)
+    parametros['eF']   = 60
+    parametros = dict(GammaLead = parametros["GammaC"], V = 100, **parametros )
+    wf = kwant.wave_function(syst, energy = energia, params = parametros)
     modes_left  = wf(0)
     modes_right = wf(1)
     # modes_total = np.vstack((wf(0), wf(1)))
 
 
     # Calculate the density:
-    sigma_z = tinyarray.array([[1,0],[0,-1]])
-    spin_proj= np.kron(sigma_z, np.eye(3))
-    identity = np.eye(6)
+    # sigma_z = tinyarray.array([[1,0],[0,-1]])
+    # spin_proj= np.kron(sigma_z, np.eye(3))
+    identity = np.eye(3)
     rho = kwant.operator.Density(syst, identity)
     psi_left = sum(rho(p) for p in modes_left)
     psi_right = sum(rho(p) for p in modes_right)

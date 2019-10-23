@@ -23,11 +23,10 @@ from system_geometry import shapes
 # be opening many figures (default = 20)
 matplotlib.rcParams['figure.max_open_warning'] = 50;
 
-def plot_bands_with_transport(esp, tipo_Ham, eF, energia, centralShape, porcent=0.25, Nkx=501, lead=0):
+def plot_bands_with_transport(esp, eF, energia, centralShape, V_shift = 0, porcent = 0.25, Nkx = 501, lead = 0):
 
     """
     esp = "97", "103" ou "110"
-    tipo_Ham = "plus" ou "minus"; # Relacionado à entrada H_12 do Hamiltoniano
     eF = campo elétrico aplicado na direção-z
     energia = nível de Fermi (para calcular correntes)
     """
@@ -37,12 +36,13 @@ def plot_bands_with_transport(esp, tipo_Ham, eF, energia, centralShape, porcent=
     name_fig = esp + "_bands_transport_eF_" \
             + str(eF) + "meV_mu_" \
             + str(energia) + "meV"\
-            + "_k_" + tipo_Ham \
+            + "_VShift_" + str(V_shift)\
             + "_lead_" + str(lead) + ".png";
 
-    hamiltonian_symb = eval("gasb.hamiltonian_" + esp + "_k_" + tipo_Ham + "()")
-    params_dict = eval("gasb.params_" + esp)
-    sistema = gasb.system_builder(hamiltonian_symb, centralShape)
+    hamiltonian_syst = eval("gasb.hamiltonian_" + esp + "_k_plus_()")
+    hamiltonian_lead = eval("gasb.hamiltonian_" + esp + "_k_plus_(" + V_shift + ")")
+    params_dict      = eval("gasb.params_" + esp)
+    sistema          = gasb.system_builder(hamiltonian_syst, hamiltonian_lead, centralShape)
 
     vec_k_limited_disc = np.linspace(-1, 1, Nkx) * np.pi * porcent;
     vec_k_limited_cont = np.linspace(-1, 1, Nkx) * np.pi/shapes.A_STD * porcent;
@@ -96,6 +96,7 @@ def plot_bands_with_transport(esp, tipo_Ham, eF, energia, centralShape, porcent=
     plt.show()
     return 0
 
+
 def read_file_and_prepare_many_eFs():
     """
     This function reads the file that carries the input information
@@ -146,6 +147,7 @@ def read_file_and_prepare_many_eFs():
 
     return numero_de_entradas, sistemas, eFs, mus
 
+
 def read_file_and_prepare_many_Fermi():
 
     try:
@@ -176,13 +178,14 @@ def read_file_and_prepare_many_Fermi():
 
     return numero_de_entradas, sistemas, eFs, mus
 
-def calculateForManyeFs(tipos_ham, shape):
+
+def calculateForManyeFs(shape):
     """
 
     Use this function when the INPUT_FILE.txt follows the format discribed
     by (WITHOUT THE COMENTS):
 
-    3               # number of system's configurations (: different widths or different Fermi levels): positive integer
+    3               # number of system's configurations : positive integer
     103             # width of the system: 97, 103 or 110 are accepted
     0 10 20 30      # values of "eF" for the first system
     430             # Fermi level for the first system
@@ -197,27 +200,30 @@ def calculateForManyeFs(tipos_ham, shape):
 
     n_sist, sists, eFields, eFermis = read_file_and_prepare_many_eFs()
 
-    for i, tipo in product(range(n_sist), tipos_ham):
+    for i in range(n_sist):
         espessura = sists[i]
         energia = eFermis[i]
 
         for eF in eFields[i]:
-            plot_bands_with_transport(esp = espessura,      # 97, 103 or 110
-                                    tipo_Ham = tipo,        # "plus" or "minus"
-                                    eF = eF,                # electric field normal to the system
-                                    energia = energia,      # Fermi level
-                                    centralShape = shape,   # geometry of scattering reagion
-                                    porcent = 0.25,         # Brillouin zone fraction shown
-                                    Nkx = 501,              # number of points to form the band
-                                    lead = 0)               # lead where the incident wave come from
+            plot_bands_with_transport(
+                esp          = espessura,  # 97, 103 or 110
+                eF           = eF,         # electric field normal to the system
+                energia      = energia,    # Fermi level
+                centralShape = shape,      # geometry of scattering reagion
+                V_shift      = -100,       # Potential on-site on the leads
+                porcent      = 0.25,       # Brillouin zone fraction shown
+                Nkx          = 501,        # number of points to form the band
+                lead         = 0           # lead where the incident wave come from
+            )
 
-def calculateForManyFermiEnergies(tipos_ham, shape):
+
+def calculateForManyFermiEnergies(shape):
     """
 
     Use this function when the INPUT_FILE.txt follows the format discribed
     by (WITHOUT THE COMENTS):
 
-    3               # number of system's configurations (: different widths or different Fermi levels): positive integer
+    3               # number of system's configurations: positive integer
     103             # width of the system: 97, 103 or 110 are accepted
     30              # value of "eF" for the first system
     11              # number of Fermi energies to use in first system
@@ -235,19 +241,22 @@ def calculateForManyFermiEnergies(tipos_ham, shape):
 
     n_sist, sists, eFields, eFermis = read_file_and_prepare_many_Fermi()
 
-    for i, tipo in product(range(n_sist), tipos_ham):
+    for i in range(n_sist):
         espessura = sists[i]
         eF = eFields[i]
 
         for e_Fermi in eFermis[i]:
-            plot_bands_with_transport(esp = espessura,      # 97, 103 or 110
-                                    tipo_Ham = tipo,        # "plus" or "minus"
-                                    eF = eF,                # electric field normal to the system
-                                    energia = e_Fermi,      # Fermi level
-                                    centralShape = shape,   # geometry of scattering reagion
-                                    porcent = 0.25,         # Brillouin zone fraction shown
-                                    Nkx = 501,              # number of points to form the band
-                                    lead = 0)               # lead where the incident wave come from
+            plot_bands_with_transport(
+                esp          = espessura, # 97, 103 or 110
+                eF           = eF,        # electric field normal to the system
+                energia      = e_Fermi,   # Fermi level
+                centralShape = shape,     # geometry of scattering reagion
+                V_shift      = -100,      # Potential on-site on the leads
+                porcent      = 0.25,      # Brillouin zone fraction shown
+                Nkx          = 501,       # number of points to form the band
+                lead         = 0          # lead where the incident wave come from
+            )
+
 
 def main():
     """
@@ -269,13 +278,6 @@ def main():
         # of Bohr's radius.
 
     """
-    # A0 = 0.529167 # raio de Bohr em Å = 10e-10 m
-    # L_STD  = 500    # nm = 10e-9
-    # W_STD  = 300    # nm = 10e-9
-    # A_STD  = 60     # units of Bohr's radius
-    # L_STD *= 10/A0  # convertion into units of Bohr's radius
-    # W_STD *= 10/A0  # convertion into units of Bohr's radius
-
 
     shapeScattering = shapes.Rect(shapes.W_STD, shapes.L_STD)
     # shapeScattering = shapes.ConstrictSmoothRect(Wmax   = shapes.W_STD,
@@ -284,11 +286,10 @@ def main():
     #                                              Lmax   = shapes.L_STD,
     #                                              Lconst = 0.5 * shapes.L_STD)
 
-    # tipos_solicitados = ["plus", "minus"]
-    tipos_solicitados = ["plus"]
-    calculateForManyeFs(tipos_solicitados, shapeScattering)
 
-    # calculateForManyFermiEnergies(tipos_solicitados, shapeScattering)
+    calculateForManyeFs(shapeScattering)
+
+    # calculateForManyFermiEnergies(shapeScattering)
 
 
 
