@@ -148,7 +148,7 @@ def plot_bands_cont2D(axis, H_func_symb, kx_array, ky_value, params):
     plt.tight_layout()
     plt.show()
 
-def band_values(syst, momenta, params, eF_value = 0):
+def band_values(ham_syst, momenta, params, eF_value = 0):
 
     """
     Calculate the energy bands and return it as a matrix.
@@ -158,8 +158,9 @@ def band_values(syst, momenta, params, eF_value = 0):
         * params    : dictionary with parameters for Hamiltonian
         * eF        : value for electric field perpendicualr to the QW
     """
+    lead = lead_metalica(ham_syst).finalized()
     params['eF'] = eF_value
-    bandas = kwant.physics.Bands(syst.leads[0], params = params)
+    bandas = kwant.physics.Bands(lead, params = params)
 
     energies = [bandas(k) for k in momenta]
 

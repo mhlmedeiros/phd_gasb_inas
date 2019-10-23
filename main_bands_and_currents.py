@@ -59,7 +59,7 @@ def plot_bands_with_transport(esp, eF, energia, centralShape, V_shift = 0, porce
                                     hamiltonian = hamiltonian_syst,
                                     params = params_dict,
                                     eF_value = eF)
-    disc_energies = trans.band_values(syst = sistema,
+    disc_energies = trans.band_values(ham_syst = hamiltonian_syst,
                                     momenta = vec_k_limited_disc,
                                     params = params_dict,
                                     eF_value = eF)
@@ -92,7 +92,7 @@ def plot_bands_with_transport(esp, eF, energia, centralShape, V_shift = 0, porce
                     spin='down',
                     colormap="Blues")
     plt.tight_layout()
-    # plt.savefig(path_fig + folder + name_fig)
+    plt.savefig(path_fig + folder + name_fig)
     plt.show()
     return 0
 
