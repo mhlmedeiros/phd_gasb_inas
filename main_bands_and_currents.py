@@ -39,8 +39,8 @@ def plot_bands_with_transport(esp, eF, energia, centralShape, V_shift = 0, porce
             + "_VShift_" + str(V_shift)\
             + "_lead_" + str(lead) + ".png";
 
-    hamiltonian_syst = eval("gasb.hamiltonian_" + esp + "_k_plus_()")
-    hamiltonian_lead = eval("gasb.hamiltonian_" + esp + "_k_plus_(" + V_shift + ")")
+    hamiltonian_syst = eval("gasb.hamiltonian_" + esp + "_k_plus()")
+    hamiltonian_lead = eval("gasb.hamiltonian_" + esp + "_k_plus(" + str(V_shift) + ")")
     params_dict      = eval("gasb.params_" + esp)
     sistema          = gasb.system_builder(hamiltonian_syst, hamiltonian_lead, centralShape)
 
@@ -56,7 +56,7 @@ def plot_bands_with_transport(esp, eF, energia, centralShape, V_shift = 0, porce
     "Bands: "
     cont_energies = trans.continuous_bands_2D(kx_array = vec_k_limited_cont,
                                     ky_value = 0,
-                                    hamiltonian = hamiltonian_symb,
+                                    hamiltonian = hamiltonian_syst,
                                     params = params_dict,
                                     eF_value = eF)
     disc_energies = trans.band_values(syst = sistema,
