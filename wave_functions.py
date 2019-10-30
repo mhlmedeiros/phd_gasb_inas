@@ -66,15 +66,15 @@ def print_info_dos_line(y_values, dos_in_line):
 
 def main():
     # Define the system:
-    # hamiltonian = gasb.hamiltonian_97_k_plus()
-    hamiltonian = gasb.hamiltonian_97_up()
-    lead_ham = gasb.hamiltonian_97_up(-100)
+    hamiltonian = gasb.hamiltonian_97_k_plus()
+    # hamiltonian = gasb.hamiltonian_97_down()
+    lead_ham = gasb.free_ham(6)
     centralShape = shapes.Rect()
     syst = gasb.system_builder(hamiltonian, lead_ham, centralShape)
 
 
     # Calculate the wave_function:
-    energia = 442
+    energia = 448
     parametros = gasb.params_97
     parametros['Eta3'] = 0
     parametros['Eta2'] = 0
@@ -87,10 +87,10 @@ def main():
 
 
     # Calculate the density:
-    # sigma_z = tinyarray.array([[1,0],[0,-1]])
-    # spin_proj= np.kron(sigma_z, np.eye(3))
-    identity = np.eye(3)
-    rho = kwant.operator.Density(syst, identity)
+    sigma_z = tinyarray.array([[1,0],[0,-1]])
+    spin_proj= np.kron(sigma_z, np.eye(3))
+    identity = np.eye(6)
+    rho = kwant.operator.Density(syst, spin_proj)
     psi_left = sum(rho(p) for p in modes_left)
     psi_right = sum(rho(p) for p in modes_right)
 
@@ -101,15 +101,17 @@ def main():
 
 
     # Plot the results:
+    colorRight = "seismic"
+    colorLeft  = "seismic"
     fig, ax = plt.subplots(2,2,figsize=(14,6))
     y_values_left = y_values_left * (shapes.A0 / 10) # conversion to nm^{-1}
     y_values_right = y_values_right * (shapes.A0 / 10) # conversion to nm^{-1}
     min_line, max_line = -0.7 * shapes.L_STD, 0.7 * shapes.L_STD
 
-    map_density(ax[0][0], syst, psi_left, colormap = "Oranges")
+    map_density(ax[0][0], syst, psi_left, colormap = colorRight)
     ax[0][0].vlines(0, min_line, max_line, linestyle = "--")
     ax[0][0].set_title("left lead")
-    map_density(ax[1][0], syst, psi_right, colormap = "Oranges")
+    map_density(ax[1][0], syst, psi_right, colormap = colorLeft)
     ax[1][0].vlines(0, min_line, max_line, linestyle = "--")
     ax[1][0].set_title("right lead")
 

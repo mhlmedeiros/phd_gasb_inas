@@ -39,9 +39,11 @@ def plot_bands_with_transport(esp, eF, energia, centralShape, V_shift = 0, porce
             + "_VShift_" + str(V_shift)\
             + "_lead_" + str(lead) + ".png";
 
+    params_raw = eval("gasb.params_" + esp)
+    params_dict = dict(GammaLead = params_raw["GammaC"], V = V_shift, **params_raw)
     hamiltonian_syst = eval("gasb.hamiltonian_" + esp + "_k_plus()")
-    hamiltonian_lead = eval("gasb.hamiltonian_" + esp + "_k_plus(" + str(V_shift) + ")")
-    params_dict      = eval("gasb.params_" + esp)
+    # hamiltonian_lead = eval("gasb.hamiltonian_" + esp + "_k_plus(" + str(V_shift) + ")")
+    hamiltonian_lead = gasb.free_ham(norbs = 6)
     sistema          = gasb.system_builder(hamiltonian_syst, hamiltonian_lead, centralShape)
 
     vec_k_limited_disc = np.linspace(-1, 1, Nkx) * np.pi * porcent;
