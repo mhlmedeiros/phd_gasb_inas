@@ -23,7 +23,7 @@ from system_geometry import shapes
 # be opening many figures (default = 20)
 matplotlib.rcParams['figure.max_open_warning'] = 50;
 
-def plot_bands_with_transport(esp, eF, energia, centralShape, V_shift = 0, porcent = 0.25, Nkx = 501, lead = 0):
+def plot_bands_with_transport(esp, eF, energia, centralShape, V_shift = 100, porcent = 0.25, Nkx = 501, lead = 0, gammaLead =  36.917):
 
     """
     esp = "97", "103" ou "110"
@@ -32,7 +32,7 @@ def plot_bands_with_transport(esp, eF, energia, centralShape, V_shift = 0, porce
     """
 
     path_fig = "/home/marcos/Desktop/projetos_trabalho/images/";
-    folder = esp + "_Angstroms_GaSb_InAs/";
+    folder = esp + "_Angstroms_GaSb_InAs/metallic_leads/";
     name_fig = esp + "_bands_transport_eF_" \
             + str(eF) + "meV_mu_" \
             + str(energia) + "meV"\
@@ -40,7 +40,7 @@ def plot_bands_with_transport(esp, eF, energia, centralShape, V_shift = 0, porce
             + "_lead_" + str(lead) + ".png";
 
     params_raw = eval("gasb.params_" + esp)
-    params_dict = dict(GammaLead = params_raw["GammaC"], V = V_shift, **params_raw)
+    params_dict = dict(GammaLead =  gammaLead, V = V_shift, **params_raw)
     hamiltonian_syst = eval("gasb.hamiltonian_" + esp + "_k_plus()")
     # hamiltonian_lead = eval("gasb.hamiltonian_" + esp + "_k_plus(" + str(V_shift) + ")")
     hamiltonian_lead = gasb.free_ham(norbs = 6)
@@ -95,7 +95,7 @@ def plot_bands_with_transport(esp, eF, energia, centralShape, V_shift = 0, porce
                     colormap="Blues")
     plt.tight_layout()
     plt.savefig(path_fig + folder + name_fig)
-    plt.show()
+    # plt.show()
     return 0
 
 
@@ -212,7 +212,7 @@ def calculateForManyeFs(shape):
                 eF           = eF,         # electric field normal to the system
                 energia      = energia,    # Fermi level
                 centralShape = shape,      # geometry of scattering reagion
-                V_shift      = -100,       # Potential on-site on the leads
+                V_shift      = 100,       # Potential on-site on the leads
                 porcent      = 0.25,       # Brillouin zone fraction shown
                 Nkx          = 501,        # number of points to form the band
                 lead         = 0           # lead where the incident wave come from
@@ -253,7 +253,7 @@ def calculateForManyFermiEnergies(shape):
                 eF           = eF,        # electric field normal to the system
                 energia      = e_Fermi,   # Fermi level
                 centralShape = shape,     # geometry of scattering reagion
-                V_shift      = -100,      # Potential on-site on the leads
+                V_shift      = 100,      # Potential on-site on the leads
                 porcent      = 0.25,      # Brillouin zone fraction shown
                 Nkx          = 501,       # number of points to form the band
                 lead         = 0          # lead where the incident wave come from

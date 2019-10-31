@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
 
+"""
+Here we have a script that print out the bands for the spin-UP and the spin-Down
+obtained by adopting a uncoupled Hamiltonian (Eta3 == Eta2 == 0).
+
+Each of those band structures is presented in separated panels. A third panel is
+also presented with both band structures (Up and Down) and the structure  for a
+coupled system for comparison.
+
+"""
 # Anaconda
 import numpy as np
 import matplotlib.pyplot as plt
