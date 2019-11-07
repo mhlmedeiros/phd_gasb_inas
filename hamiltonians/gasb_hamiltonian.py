@@ -638,7 +638,7 @@ def hamiltonian_110_down(V_shift=0):
 #  IDEA:  To use the same system hamiltonian but with a off-set
 #  thus we'll can set the bulk region of the spectrum as source and drain.
 
-def free_ham(norbs):
+def free_ham(norbs=6):
     sympify = kwant.continuum.sympify
     subs = {"K":"GammaLead * (k_x**2 + k_y**2)", "orbs" : norbs}
     H = sympify("13.6 * 1000 * identity(orbs) * K + identity(orbs) * V", locals=subs)

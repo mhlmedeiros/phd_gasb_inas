@@ -187,6 +187,13 @@ def band_with_line_gasb(axis, momenta, energies,
     esse, por sua vez, tem unidade também dependente dos parâmetros
     do Hamiltoniano.
     """
+
+    font_labels = 25
+    font_titles = 25
+    font = {'family' : 'serif', 'weight' : 'bold', 'size': font_labels}
+    matplotlib.rc('font', **font)
+
+
     momenta_trans = momenta * (shapes.A_STD*shapes.A0*10**(-1))**(-1) # conversion to nm^{-1}
 
     # fig = plt.figure()
@@ -206,8 +213,8 @@ def band_with_line_gasb(axis, momenta, energies,
     axis.grid()
     axis.set_xlim(-kx_max, kx_max)
     axis.set_ylim(E_min, E_max)
-    axis.set_xlabel(r'k$_x$ [$nm^{-1}$]')
-    axis.set_ylabel(r'$\varepsilon$ [meV]')
+    axis.set_xlabel(r'k$_x$ [$nm^{-1}$]', fontsize=font_titles)
+    axis.set_ylabel(r'$\varepsilon$ [meV]', fontsize=font_titles)
     # fig = plt.gcf()
     # fig.set_size_inches(6, 6)
     # plt.tight_layout()

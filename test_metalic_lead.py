@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -14,10 +16,10 @@ from system_geometry import shapes
 def main():
 
     ## Define system:
-    syst_format = shapes.Rect()
-    syst_hamiltonian = gasb.hamiltonian_97_up()
-    lead_ham = gasb.hamiltonian_97_up(100)
-    syst = gasb.system_builder(syst_hamiltonian, lead_ham, syst_format)
+    # syst_format = shapes.Rect()
+    # syst_hamiltonian = gasb.hamiltonian_97_up()
+    lead_ham = gasb.free_ham(norbs=6)
+    # syst = gasb.just_lead_builder(lead_ham)
     # kwant.plot(syst)
 
     ## Define the parameters of the Hamiltonians (for system and leads)
@@ -37,22 +39,22 @@ def main():
     #
     # fig_dens, axis_dens = plt.subplots(1, 1, figsize = (10,8))
     # kwant.plotter.map(syst, psi_left, ax = axis_dens, cmap = "Oranges")
-    energia = 442
-    eF = 60
-    fig_current, axis = plt.subplots(1, 1, figsize = (8,5))
-    trans.current_density(axis, syst, new_params, eF_value = eF, energy = energia, lead_index = 0, colormap="Reds")
-    plt.show()
-
-    # Nkx = 200
-    # porcent = 1.
-    # momenta = np.linspace(-1, 1, Nkx) * np.pi * porcent
-    # bands = trans.band_values(syst, momenta, new_params, eF_value = 0)
-    # fig_bands, axis_band = plt.subplots(1, 1, figsize = (10,8))
-    # axis_band.plot(momenta, bands)
-    # # plt.xlim(-.2,.2)
-    # # plt.ylim(400,500)
-    # plt.grid()
+    # energia = 442
+    # eF = 60
+    # fig_current, axis = plt.subplots(1, 1, figsize = (8,5))
+    # trans.current_density(axis, syst, new_params, eF_value = eF, energy = energia, lead_index = 0, colormap="Reds")
     # plt.show()
+
+    Nkx = 200
+    porcent = 1.
+    momenta = np.linspace(-1, 1, Nkx) * np.pi * porcent
+    bands = trans.band_values(lead_ham, momenta, new_params)
+    fig_bands, axis_band = plt.subplots(1, 1, figsize = (10,8))
+    axis_band.plot(momenta, bands)
+    # plt.xlim(-.2,.2)
+    # plt.ylim(400,500)
+    plt.grid()
+    plt.show()
 
 if __name__ == "__main__":
     main()

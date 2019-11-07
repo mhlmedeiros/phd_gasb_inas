@@ -289,9 +289,9 @@ def main():
     #                                              Lconst = 0.5 * shapes.L_STD)
 
 
-    calculateForManyeFs(shapeScattering)
+    # calculateForManyeFs(shapeScattering)
 
-    # calculateForManyFermiEnergies(shapeScattering)
+    calculateForManyFermiEnergies(shapeScattering)
 
 
 

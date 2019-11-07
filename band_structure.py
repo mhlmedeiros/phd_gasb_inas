@@ -62,7 +62,7 @@ def main():
     E_min_plot = 420
     E_max_plot = 460
 
-    fig, ax = plt.subplots(1, 3, figsize=(16,8))
+    fig, ax = plt.subplots(1, 3, figsize=(14,7))
     tools.band_with_line_gasb(ax[0], momenta, energies_up,
                             kx_max = 0.15, E_max = E_max_plot, E_min = E_min_plot)
     tools.band_with_line_gasb(ax[1], momenta, energies_dn,
@@ -75,7 +75,7 @@ def main():
     tools.band_with_line_gasb(ax[2], momenta, energies_dn,
                             kx_max = 0.15, E_max = E_max_plot, E_min = E_min_plot,
                             linestyle_plot = "-", color_plot = "blue",
-                            label_plot = "Down.")
+                            label_plot = "Down")
     tools.band_with_line_gasb(ax[2], momenta, energies_coupled,
                             kx_max = 0.15, E_max = E_max_plot, E_min = E_min_plot,
                             linestyle_plot = "--", color_plot = "black",
@@ -92,7 +92,7 @@ def main():
     ax[1].set_title("spin-down")
 
     ax[2].set_title("both spins")
-    ax[2].legend(fontsize = 12, bbox_to_anchor = (0.68, 0.64))
+    ax[2].legend(fontsize = 11, bbox_to_anchor = (0.64, 0.7))
 
     plt.tight_layout()
     plt.show()
