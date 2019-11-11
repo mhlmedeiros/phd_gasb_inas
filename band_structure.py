@@ -70,29 +70,31 @@ def main():
 
     tools.band_with_line_gasb(ax[2], momenta, energies_up,
                             kx_max = 0.15, E_max = E_max_plot, E_min = E_min_plot,
-                            linestyle_plot = "-", color_plot = "red",
+                            linestyle_plot = "-", color_plot = "black",
                             label_plot = "Up")
     tools.band_with_line_gasb(ax[2], momenta, energies_dn,
                             kx_max = 0.15, E_max = E_max_plot, E_min = E_min_plot,
-                            linestyle_plot = "-", color_plot = "blue",
-                            label_plot = "Down")
-    tools.band_with_line_gasb(ax[2], momenta, energies_coupled,
-                            kx_max = 0.15, E_max = E_max_plot, E_min = E_min_plot,
                             linestyle_plot = "--", color_plot = "black",
-                            marker_plot = None, label_plot = "Coupled")
+                            label_plot = "Down")
+    # tools.band_with_line_gasb(ax[2], momenta, energies_coupled,
+    #                         kx_max = 0.15, E_max = E_max_plot, E_min = E_min_plot,
+    #                         linestyle_plot = "--", color_plot = "black",
+    #                         marker_plot = None, label_plot = "Coupled")
 
     # Plot bands for bulk
     momenta_bulk = tools.trans_momenta(momenta)
-    ax[0].plot(momenta_bulk, bulk_up, linewidth=2.5)
+    ax[0].plot(momenta_bulk, bulk_up, linewidth=2.5, color="red")
     # ax[1].plot([0.03733],[440],marker = "o", markersize = 7, color = "blue")
-    ax[0].set_title("spin-up")
+    ax[0].set_title("(a)")
 
-    ax[1].plot(momenta_bulk, bulk_dn, linewidth=2.5)
+    ax[1].plot(momenta_bulk, bulk_dn, linewidth=2.5, color="blue")
     # ax[0].plot([0.02784],[440], marker = "o", markersize = 7, color = "red")
-    ax[1].set_title("spin-down")
+    ax[1].set_title("(b)")
 
-    ax[2].set_title("both spins")
-    ax[2].legend(fontsize = 11, bbox_to_anchor = (0.64, 0.7))
+    ax[2].set_title("(c)")
+    ax[2].plot(momenta_bulk, bulk_up, linewidth=2.5, color="red")
+    ax[2].plot(momenta_bulk, bulk_dn, linewidth=2.5, color="blue")
+    ax[2].legend(fontsize = 13, bbox_to_anchor = (0.64, 0.7))
 
     plt.tight_layout()
     plt.show()

@@ -188,8 +188,8 @@ def band_with_line_gasb(axis, momenta, energies,
     do Hamiltoniano.
     """
 
-    font_labels = 25
-    font_titles = 25
+    font_labels = 22
+    font_titles = 22
     font = {'family' : 'serif', 'weight' : 'bold', 'size': font_labels}
     matplotlib.rc('font', **font)
 

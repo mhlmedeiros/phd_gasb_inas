@@ -21,7 +21,7 @@ from system_geometry import shapes
 
 # This following comand turns off the warnings for
 # be opening many figures (default = 20)
-matplotlib.rcParams['figure.max_open_warning'] = 50;
+matplotlib.rcParams['figure.max_open_warning'] = 50
 
 def plot_bands_with_transport(esp, eF, energia, centralShape, V_shift = 100, porcent = 0.25, Nkx = 501, lead = 0, gammaLead =  36.917):
 
@@ -31,13 +31,13 @@ def plot_bands_with_transport(esp, eF, energia, centralShape, V_shift = 100, por
     energia = nível de Fermi (para calcular correntes)
     """
 
-    path_fig = "/home/marcos/Desktop/projetos_trabalho/images/";
-    folder = esp + "_Angstroms_GaSb_InAs/metallic_leads/";
+    path_fig = "/home/marcos/Desktop/projetos_trabalho/images/"
+    folder = esp + "_Angstroms_GaSb_InAs/metallic_leads/"
     name_fig = esp + "_bands_transport_eF_" \
             + str(eF) + "meV_mu_" \
             + str(energia) + "meV"\
             + "_VShift_" + str(V_shift)\
-            + "_lead_" + str(lead) + ".png";
+            + "_lead_" + str(lead) + ".png"
 
     params_raw = eval("gasb.params_" + esp)
     params_dict = dict(GammaLead =  gammaLead, V = V_shift, **params_raw)
@@ -46,8 +46,8 @@ def plot_bands_with_transport(esp, eF, energia, centralShape, V_shift = 100, por
     hamiltonian_lead = gasb.free_ham(norbs = 6)
     sistema          = gasb.system_builder(hamiltonian_syst, hamiltonian_lead, centralShape)
 
-    vec_k_limited_disc = np.linspace(-1, 1, Nkx) * np.pi * porcent;
-    vec_k_limited_cont = np.linspace(-1, 1, Nkx) * np.pi/shapes.A_STD * porcent;
+    vec_k_limited_disc = np.linspace(-1, 1, Nkx) * np.pi * porcent
+    vec_k_limited_cont = np.linspace(-1, 1, Nkx) * np.pi/shapes.A_STD * porcent
 
     fig1 = plt.figure(figsize=(10,10))
     ax1 = fig1.add_subplot(121)
@@ -100,6 +100,7 @@ def plot_bands_with_transport(esp, eF, energia, centralShape, V_shift = 100, por
 
 
 def read_file_and_prepare_many_eFs():
+
     """
     This function reads the file that carries the input information
     and return lists that may be iterated to automatically perform
@@ -121,6 +122,7 @@ def read_file_and_prepare_many_eFs():
     0 10 20 30 40   # values of "eF" for the third system
     435             # Fermi level for the third system
     """
+
 
     try:
         infile = sys.argv[1]
@@ -182,8 +184,7 @@ def read_file_and_prepare_many_Fermi():
 
 
 def calculateForManyeFs(shape):
-    """
-
+    '''
     Use this function when the INPUT_FILE.txt follows the format discribed
     by (WITHOUT THE COMENTS):
 
@@ -198,7 +199,7 @@ def calculateForManyeFs(shape):
     0 10 20 30 40   # values of "eF" for the third system
     435             # Fermi level for the third system
 
-    """
+    '''
 
     n_sist, sists, eFields, eFermis = read_file_and_prepare_many_eFs()
 
@@ -262,22 +263,22 @@ def calculateForManyFermiEnergies(shape):
 
 def main():
     """
-    Here we have only the calls for the actual calculations.
+        Here we have only the calls for the actual calculations.
 
-    Some remainders:
-        * Each system width has a different Hamiltonian
-        * Each Hamiltonian have two different formulations:
-            - One with k_plus (k_x + 1j*k_y) at the element H_12;
-            - Other with k_minus (k_x - 1j*k_y) at the same element;
-            - The formulations are labeled as "plus" and "minus";
+        Some remainders:
+            * Each system width has a different Hamiltonian
+            * Each Hamiltonian have two different formulations:
+                - One with k_plus (k_x + 1j*k_y) at the element H_12;
+                - Other with k_minus (k_x - 1j*k_y) at the same element;
+                - The formulations are labeled as "plus" and "minus";
     """
 
     """
-        # Default values for building the systems:
-        #
-        # Remembering that the Hamiltonian's parameters
-        # adopt units which lengths are mesured in units
-        # of Bohr's radius.
+            # Default values for building the systems:
+            #
+            # Remembering that the Hamiltonian's parameters
+            # adopt units which lengths are mesured in units
+            # of Bohr's radius.
 
     """
 
