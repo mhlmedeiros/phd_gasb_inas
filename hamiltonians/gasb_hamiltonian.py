@@ -672,7 +672,7 @@ def lead_metalica(hamiltonian, W = W_STD, a = A_STD):
     return lead
 
 # Builder:
-def system_builder(hamiltonian, lead_ham, centralShape, a = A_STD):
+def system_builder(hamiltonian, lead_ham, centralShape, a_lattice = A_STD):
     '''
     Here we define the system's geometry as a rectangular slab attached with leads
     of same width.
@@ -697,7 +697,7 @@ def system_builder(hamiltonian, lead_ham, centralShape, a = A_STD):
         W_STD   = W_nano * 10/ A0   # units of Bohr's radius
 
     '''
-    template = kwant.continuum.discretize(hamiltonian, grid=a)
+    template = kwant.continuum.discretize(hamiltonian, grid=a_lattice)
 
     # def shape(site):
     #     (x, y) = site.pos
@@ -712,7 +712,7 @@ def system_builder(hamiltonian, lead_ham, centralShape, a = A_STD):
 
     # lead_ham = free_ham(norbs)
     # lead_ham = semi_metal_ham_3x3()
-    lead = lead_metalica(lead_ham, W = centralShape.Wmax, a = A_STD)
+    lead = lead_metalica(lead_ham, W = centralShape.Wmax, a = a_lattice)
     # lead.fill(template, lead_shape, (-centralShape.Lmax, 0))
 
     syst.attach_lead(lead)
