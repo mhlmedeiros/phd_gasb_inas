@@ -96,8 +96,15 @@ def main():
 
 
     # Calculate dos in a line
-    dos_in_line_from_left, y_values_left  = density_in_line(syst, modes_left, identity)
-    dos_in_line_from_right, y_values_right = density_in_line(syst, modes_right, identity)
+    dos_in_line_from_left  = density_in_line(syst, psi)
+    dos_in_line_from_both  = density_in_line(syst, np.vstack((wf(0),wf(1))))
+    plt.plot(sum(dos_in_line_from_both))
+    plt.show()
+    # print(dos_in_line.shape)
+    # print(dos_in_line)
+    plot_dos_in_line(dos_in_line_from_left)
+    # plot_dos_in_line(dos_in_line_from_both)
+    print(sum(dos_in_line_from_both).shape)
 
 
     # Plot the results:
