@@ -58,6 +58,20 @@ def edit_axis(axis, spin):
 def trans_momenta(k_x):
     return k_x * (shapes.A_STD*shapes.A0*10**(-1))**(-1) # conversion from nm^{-1}
 
+def current_density(axis, syst, parameters, eF_value = 0, energy = 428, lead_index=0, colormap="Reds"):
+    parameters["eF"] = eF_value
+
+    wf = kwant.wave_function(syst, energy=energy, params=parameters)
+    J_spin = kwant.operator.Current(syst)
+
+    current_spin = sum(J_spin(psi, params = parameters) for psi in wf(lead_index))
+    # kwant.plotter.current(syst, current_spin, cmap = colormap, colorbar = False, show = False, ax=axis, density=1/9)
+    kwant.plotter.current(syst, current_spin, cmap = colormap, colorbar = False, show = False, ax=axis)
+    edit_axis(axis, "none") # change units to nm
+    axis.set_title(" ")
+
+    return 0
+
 def current_spin(axis, syst, parameters, eF_value = 0, energy = 428, lead_index=0, spin="up", colormap="Reds"):
     #Copiado para phd
     """
@@ -134,7 +148,7 @@ def plot_bands_cont2D(axis, H_func_symb, kx_array, ky_value, params):
     plt.tight_layout()
     plt.show()
 
-def band_values(syst, momenta, params, eF_value = 0):
+def band_values(ham_syst, momenta, params, eF_value = 0):
 
     """
     Calculate the energy bands and return it as a matrix.
@@ -144,8 +158,9 @@ def band_values(syst, momenta, params, eF_value = 0):
         * params    : dictionary with parameters for Hamiltonian
         * eF        : value for electric field perpendicualr to the QW
     """
+    lead = lead_metalica(ham_syst).finalized()
     params['eF'] = eF_value
-    bandas = kwant.physics.Bands(syst.leads[0], params = params)
+    bandas = kwant.physics.Bands(lead, params = params)
 
     energies = [bandas(k) for k in momenta]
 
@@ -172,6 +187,13 @@ def band_with_line_gasb(axis, momenta, energies,
     esse, por sua vez, tem unidade também dependente dos parâmetros
     do Hamiltoniano.
     """
+
+    font_labels = 22
+    font_titles = 22
+    font = {'family' : 'serif', 'weight' : 'bold', 'size': font_labels}
+    matplotlib.rc('font', **font)
+
+
     momenta_trans = momenta * (shapes.A_STD*shapes.A0*10**(-1))**(-1) # conversion to nm^{-1}
 
     # fig = plt.figure()
@@ -191,8 +213,8 @@ def band_with_line_gasb(axis, momenta, energies,
     axis.grid()
     axis.set_xlim(-kx_max, kx_max)
     axis.set_ylim(E_min, E_max)
-    axis.set_xlabel(r'k$_x$ [$nm^{-1}$]')
-    axis.set_ylabel(r'$\varepsilon$ [meV]')
+    axis.set_xlabel(r'k$_x$ [$nm^{-1}$]', fontsize=font_titles)
+    axis.set_ylabel(r'$\varepsilon$ [meV]', fontsize=font_titles)
     # fig = plt.gcf()
     # fig.set_size_inches(6, 6)
     # plt.tight_layout()

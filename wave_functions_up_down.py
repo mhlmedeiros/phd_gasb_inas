@@ -74,14 +74,16 @@ def main():
     # Define the system:
     hamiltonian_up = gasb.hamiltonian_97_up()
     hamiltonian_dn = gasb.hamiltonian_97_up_y_inv()
+    lead_ham = gasb.hamiltonian_97_up(-100)
     centralShape = shapes.Rect()
-    syst_up = gasb.system_builder(hamiltonian_up, centralShape)
-    syst_dn = gasb.system_builder(hamiltonian_dn, centralShape)
+    syst_up = gasb.system_builder(hamiltonian_up, lead_ham, centralShape)
+    syst_dn = gasb.system_builder(hamiltonian_dn, lead_ham, centralShape)
 
     # Calculate the wave_function:
-    energia = 440
+    energia = 442
     parametros = gasb.params_97
-    parametros['eF'] = 50
+    parametros['eF'] = 60
+    # parametros = dict(GammaLead = parametros["GammaC"], V = 100, **parametros )
     wf_up = kwant.wave_function(syst_up, energy=energia, params=parametros)
     wf_dn = kwant.wave_function(syst_dn, energy=energia, params=parametros)
     modes_up = wf_up(0) # from left lead
@@ -111,10 +113,10 @@ def main():
     ax[0][0].set_title("spin up")
     map_density(ax[1][0], syst_dn, psi_dn, colormap = "Blues")
     ax[1][0].vlines(0, min_line, max_line, linestyle = "--")
-    ax[1][0].set_title("spin down")
+    ax[1][0].set_title("spin up inv.")
 
     ax[0][1].plot(y_values_up, normalize(dos_in_line_up),
-                    marker = ".", markersize = 2.5, linestyle = "-" )
+                    marker = ".", markersize = 2.5, linestyle = "-", color = "red")
     ax[1][1].plot(y_values_dn, normalize(dos_in_line_dn),
                     marker = ".", markersize = 2.5, linestyle = "-" )
     plt.tight_layout()
