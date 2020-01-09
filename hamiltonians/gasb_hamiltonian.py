@@ -254,8 +254,8 @@ def hamiltonian_97_down(V_shift=0):
 
     subs = {
     'H_44' : 'EC + (k_x**2 + k_y**2) * GammaC - AlphaC(eF,A3,B3) * (k_x + k_y)',
-    'H_45' : '+1j * (k_x - 1j * k_y) * Px(P)',
-    'H_54' : '-1j * (k_x + 1j * k_y) * Px(P)',
+    'H_45' : '+1j * (k_x + 1j * k_y) * Px(P)',
+    'H_54' : '-1j * (k_x - 1j * k_y) * Px(P)',
     'H_55' : 'EV + DeltaE(eF,A2) + (k_x**2 + k_y**2) * (GammaV + DeltaGamma(eF,A1,B1,C1)) - AlphaV(eF,A4,B4,C4) * (k_x + k_y)',
     'H_66' : 'EV - DeltaE(eF,A2) + (k_x**2 + k_y**2) * (GammaV - DeltaGamma(eF,A1,B1,C1)) - AlphaV(eF,A4,B4,C4) * (k_x + k_y)',
     'V'    : V_shift
@@ -666,7 +666,15 @@ def lead_metalica(hamiltonian, W = W_STD, a = A_STD):
         (x, y) = site.pos
         return (-W/2 < y < W/2)
 
-    lead = kwant.Builder(kwant.TranslationalSymmetry([-a, 0]))
+    sigma_z = np.array([[1,0],[0,-1]])
+    tau_z   = np.kron(sigma_z, np.eye(3)) 
+
+    try:
+        lead = kwant.Builder(kwant.TranslationalSymmetry([-a, 0]), conservation_law = -tau_z)
+    except:
+        print("Except in line 674 of 'gasb_hamiltonian.py' located in ./hamiltonians ")
+        lead = kwant.Builder(kwant.TranslationalSymmetry([-a, 0]))
+
     lead.fill(template, lead_shape, (-a, 0))
 
     return lead

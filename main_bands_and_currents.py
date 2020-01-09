@@ -23,6 +23,24 @@ from system_geometry import shapes
 # be opening many figures (default = 20)
 matplotlib.rcParams['figure.max_open_warning'] = 50
 
+path_geral = "/home/marcos/Desktop/projetos_trabalho/"
+path_fig   = path_geral + "images/" # place to figures
+path_data  = path_geral + "data_hdf5_phd_gasb_inas/" # place to figures
+folder_suf = "_Angstroms_GaSb_InAs/metallic_leads/fermi_fixed_electric_field_var/"
+
+def names(esp, eF, energia,V_shift, lead):
+    name_geral = esp + "_bands_transport_eF_" \
+        + str(eF) + "meV_mu_" \
+        + str(energia) + "meV"\
+        + "_VShift_" + str(V_shift)\
+        + "_lead_" + str(lead) + ".png"
+
+    name_fig      = name_geral + ".png"
+    name_dataset  = name_geral
+
+    return name_fig, name_geral
+
+
 def plot_bands_with_transport(esp, eF, energia, centralShape, V_shift = 100, porcent = 0.25, Nkx = 501, lead = 0, gammaLead =  36.917):
 
     """
@@ -31,18 +49,12 @@ def plot_bands_with_transport(esp, eF, energia, centralShape, V_shift = 100, por
     energia = nível de Fermi (para calcular correntes)
     """
 
-    path_fig = "/home/marcos/Desktop/projetos_trabalho/images/"
-    folder = esp + "_Angstroms_GaSb_InAs/metallic_leads/"
-    name_fig = esp + "_bands_transport_eF_" \
-            + str(eF) + "meV_mu_" \
-            + str(energia) + "meV"\
-            + "_VShift_" + str(V_shift)\
-            + "_lead_" + str(lead) + ".png"
+    folder_fig = esp + folder_suf
 
     params_raw = eval("gasb.params_" + esp)
     params_dict = dict(GammaLead =  gammaLead, V = V_shift, **params_raw)
     hamiltonian_syst = eval("gasb.hamiltonian_" + esp + "_k_plus()")
-    # hamiltonian_lead = eval("gasb.hamiltonian_" + esp + "_k_plus(" + str(V_shift) + ")")
+
     hamiltonian_lead = gasb.free_ham(norbs = 6)
     sistema          = gasb.system_builder(hamiltonian_syst, hamiltonian_lead, centralShape)
 
@@ -94,7 +106,10 @@ def plot_bands_with_transport(esp, eF, energia, centralShape, V_shift = 100, por
                     spin='down',
                     colormap="Blues")
     plt.tight_layout()
-    plt.savefig(path_fig + folder + name_fig)
+
+    "Saving the plot"
+    name_fig,_ = names(esp, eF, energia, V_shift, lead)
+    plt.savefig(path_fig + folder_fig + name_fig)
     # plt.show()
     return 0
 
@@ -290,9 +305,9 @@ def main():
     #                                              Lconst = 0.5 * shapes.L_STD)
 
 
-    # calculateForManyeFs(shapeScattering)
+    calculateForManyeFs(shapeScattering)
 
-    calculateForManyFermiEnergies(shapeScattering)
+    # calculateForManyFermiEnergies(shapeScattering)
 
 
 

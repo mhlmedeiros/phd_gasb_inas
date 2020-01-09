@@ -102,7 +102,7 @@ def current_spin(axis, syst, parameters, eF_value = 0, energy = 428, lead_index=
     kwant.plotter.current(syst, current_spin, cmap = colormap, colorbar = False, show = False, ax=axis)
     edit_axis(axis, spin) # change units to nm
 
-    return 0
+    return current_spin
 
 def continuous_bands_2D(kx_array, ky_value, hamiltonian, params, eF_value = 0):
     params["eF"] = eF_value
