@@ -28,20 +28,32 @@ path_fig   = path_geral + "images/" # place to figures
 path_data  = path_geral + "data_hdf5_phd_gasb_inas/" # place to figures
 folder_suf = "_Angstroms_GaSb_InAs/metallic_leads/fermi_fixed_electric_field_var/"
 
-def names(esp, eF, energia,V_shift, lead):
+def names(esp, eF, energia,V_shift, lead, porcent=0.25, Nkx=501, gammaLead=36.917):
     name_geral = esp + "_bands_transport_eF_" \
         + str(eF) + "meV_mu_" \
         + str(energia) + "meV"\
         + "_VShift_" + str(V_shift)\
-        + "_lead_" + str(lead) + ".png"
+        + "_lead_" + str(lead)
+
+    name_bands = esp + "_band_eF_" \
+        + str(eF) + "meV_" \
+        + str(percent) + "BZ_"\
+        + "Nkx_" + str(Nkx) + ".npz"
+
+    name_currents = esp + "_currents_eF_" \
+        + str(eF) + "meV_Fermi_" \
+        + str(energia) + "meV"\
+        + "_VShift_" + str(V_shift)\
+        + "_lead_" + str(lead) \
+        + "_gammaLead_" + str(gammaLead)
 
     name_fig      = name_geral + ".png"
     name_dataset  = name_geral
 
-    return name_fig, name_geral
+    return name_fig, name_bands, name_currents, name_geral
 
 
-def plot_bands_with_transport(esp, eF, energia, centralShape, V_shift = 100, porcent = 0.25, Nkx = 501, lead = 0, gammaLead =  36.917):
+def plot_bands_with_currents(esp, eF, energia, centralShape, V_shift=100, porcent=0.25, Nkx=501, lead=0, gammaLead=36.917):
 
     """
     esp = "97", "103" ou "110"
@@ -58,8 +70,8 @@ def plot_bands_with_transport(esp, eF, energia, centralShape, V_shift = 100, por
     hamiltonian_lead = gasb.free_ham(norbs = 6)
     sistema          = gasb.system_builder(hamiltonian_syst, hamiltonian_lead, centralShape)
 
-    vec_k_limited_disc = np.linspace(-1, 1, Nkx) * np.pi * porcent
-    vec_k_limited_cont = np.linspace(-1, 1, Nkx) * np.pi/shapes.A_STD * porcent
+    vec_k_limited_confined = np.linspace(-1, 1, Nkx) * np.pi * porcent
+    vec_k_limited_free = np.linspace(-1, 1, Nkx) * np.pi/shapes.A_STD * porcent
 
     fig1 = plt.figure(figsize=(10,10))
     ax1 = fig1.add_subplot(121)
@@ -68,43 +80,46 @@ def plot_bands_with_transport(esp, eF, energia, centralShape, V_shift = 100, por
     ax4 = fig1.add_subplot(326)
 
     "Bands: "
-    cont_energies = trans.continuous_bands_2D(kx_array = vec_k_limited_cont,
+    free_elec_energies = trans.continuous_bands_2D(kx_array = vec_k_limited_free,
                                     ky_value = 0,
                                     hamiltonian = hamiltonian_syst,
                                     params = params_dict,
                                     eF_value = eF)
-    disc_energies = trans.band_values(ham_syst = hamiltonian_syst,
-                                    momenta = vec_k_limited_disc,
+    confined_elec_energies = trans.band_values(ham_syst = hamiltonian_syst,
+                                    momenta = vec_k_limited_confined,
                                     params = params_dict,
                                     eF_value = eF)
     trans.bands_cont2D_and_discr(axis = ax1,
-                                cont_energies = cont_energies,
-                                disc_energies = disc_energies,
-                                momenta = vec_k_limited_disc,
+                                free_elec_energies = free_elec_energies,
+                                confined_elec_energies = confined_elec_energies,
+                                momenta = vec_k_limited_confined,
                                 kx_max = 0.20,
                                 E_min = 405,
                                 E_max = 460,
                                 E_line = energia)
 
-    "Transport: "
-    trans.current_spin(ax2, sistema, params_dict,
+    "Currents: "
+    trans.current_spin(sistema, params_dict,
                     eF_value = eF,
                     energy = energia,
                     lead_index=lead,
                     spin='total',
-                    colormap="Oranges")
-    trans.current_spin(ax3, sistema, params_dict,
+                    colormap="Oranges",
+                    axis=ax2)
+    trans.current_spin(sistema, params_dict,
                     eF_value = eF,
                     energy = energia,
                     lead_index=lead,
                     spin='up',
-                    colormap="Reds")
-    trans.current_spin(ax4, sistema, params_dict,
+                    colormap="Reds",
+                    axis=ax3)
+    trans.current_spin(sistema, params_dict,
                     eF_value = eF,
                     energy = energia,
                     lead_index=lead,
                     spin='down',
-                    colormap="Blues")
+                    colormap="Blues",
+                    axis=ax4)
     plt.tight_layout()
 
     "Saving the plot"
@@ -112,6 +127,79 @@ def plot_bands_with_transport(esp, eF, energia, centralShape, V_shift = 100, por
     plt.savefig(path_fig + folder_fig + name_fig)
     # plt.show()
     return 0
+
+
+def calc_bands_and_currents(esp, eF, energia, centralShape, V_shift=100, porcent=0.25, Nkx=501, lead=0, gammaLead=36.917):
+
+    Up_current, Dn_current, Total_current = calcula_correntes(esp, eF, energia, centralShape, V_shift, lead, gammaLead)
+    kx_conf, E_free, E_conf = calcula_Bandas(esp, eF, centralShape, V_shift, porcent, Nkx, gammaLead)
+
+    path_bands = "./data/band_structure/"
+    path_current = "./data/local_currents/"
+    
+    _, name_bands, name_currents,_ = names(esp, eF, energia,V_shift, lead, porcent, Nkx, gammaLead)
+    np.savez(path_bands + name_bands, kx=kx_conf, E_free=E_free, E_conf=E_conf)
+    np.savez(path_current + name_currents, Up=Up_current, Dn=Dn_current, Total=Total_current)
+
+    return 0
+
+
+def calcula_correntes(esp, eF, energia, centralShape, V_shift = 100, lead = 0, gammaLead =  36.917):
+
+    # folder_fig = esp + folder_suf
+
+    params_raw = eval("gasb.params_" + esp)
+    params_dict = dict(GammaLead =  gammaLead, V = V_shift, **params_raw)
+    hamiltonian_syst = eval("gasb.hamiltonian_" + esp + "_k_plus()")
+
+    hamiltonian_lead = gasb.free_ham(norbs = 6)
+    sistema          = gasb.system_builder(hamiltonian_syst, hamiltonian_lead, centralShape)
+    
+    "Currents: "
+    current_Total = trans.current_spin(sistema, params_dict,
+                                    eF_value = eF,
+                                    energy = energia,
+                                    lead_index=lead,
+                                    spin='total')
+    current_Up = trans.current_spin(sistema, params_dict,
+                                    eF_value = eF,
+                                    energy = energia,
+                                    lead_index=lead,
+                                    spin='up')
+    current_Dn = trans.current_spin(sistema, params_dict,
+                                    eF_value = eF,
+                                    energy = energia,
+                                    lead_index=lead,
+                                    spin='down')
+    
+    
+    return current_Up, current_Dn, current_Total
+
+
+def calcula_Bandas(esp, eF, centralShape, V_shift = 100, porcent = 0.25, Nkx = 501, gammaLead =  36.917):
+
+    params_raw = eval("gasb.params_" + esp)
+    params_dict = dict(GammaLead =  gammaLead, V = V_shift, **params_raw)
+    hamiltonian_syst = eval("gasb.hamiltonian_" + esp + "_k_plus()")
+
+    hamiltonian_lead = gasb.free_ham(norbs = 6)
+    sistema          = gasb.system_builder(hamiltonian_syst, hamiltonian_lead, centralShape)
+
+    vec_k_limited_confined = np.linspace(-1, 1, Nkx) * np.pi * porcent
+    vec_k_limited_free = np.linspace(-1, 1, Nkx) * np.pi/shapes.A_STD * porcent
+
+    "Bands: "
+    free_elec_energies = trans.continuous_bands_2D(kx_array = vec_k_limited_free,
+                                    ky_value = 0,
+                                    hamiltonian = hamiltonian_syst,
+                                    params = params_dict,
+                                    eF_value = eF)
+    confined_elec_energies = trans.band_values(ham_syst = hamiltonian_syst,
+                                    momenta = vec_k_limited_confined,
+                                    params = params_dict,
+                                    eF_value = eF)
+                                    
+    return vec_k_limited_confined, free_elec_energies, confined_elec_energies 
 
 
 def read_file_and_prepare_many_eFs():
@@ -223,7 +311,44 @@ def calculateForManyeFs(shape):
         energia = eFermis[i]
 
         for eF in eFields[i]:
-            plot_bands_with_transport(
+            calc_bands_and_currents(
+                esp          = espessura,  # 97, 103 or 110
+                eF           = eF,         # electric field normal to the system
+                energia      = energia,    # Fermi level
+                centralShape = shape,      # geometry of scattering reagion
+                V_shift      = 100,       # Potential on-site on the leads
+                porcent      = 0.25,       # Brillouin zone fraction shown
+                Nkx          = 501,        # number of points to form the band
+                lead         = 0           # lead where the incident wave come from
+            )
+
+
+def plottingForManyeFs(shape):
+    '''
+    Use this function when the INPUT_FILE.txt follows the format discribed
+    by (WITHOUT THE COMENTS):
+
+    3               # number of system's configurations : positive integer
+    103             # width of the system: 97, 103 or 110 are accepted
+    0 10 20 30      # values of "eF" for the first system
+    430             # Fermi level for the first system
+    103             # Start of the second system: width
+    0 2.5 5 7.5     # values of "eF" for the second system
+    415             # Fermi level for the second system
+    97              # Start of the third system: width
+    0 10 20 30 40   # values of "eF" for the third system
+    435             # Fermi level for the third system
+
+    '''
+
+    n_sist, sists, eFields, eFermis = read_file_and_prepare_many_eFs()
+
+    for i in range(n_sist):
+        espessura = sists[i]
+        energia = eFermis[i]
+
+        for eF in eFields[i]:
+            plot_bands_with_currents(
                 esp          = espessura,  # 97, 103 or 110
                 eF           = eF,         # electric field normal to the system
                 energia      = energia,    # Fermi level
@@ -264,7 +389,7 @@ def calculateForManyFermiEnergies(shape):
         eF = eFields[i]
 
         for e_Fermi in eFermis[i]:
-            plot_bands_with_transport(
+            plot_bands_with_currents(
                 esp          = espessura, # 97, 103 or 110
                 eF           = eF,        # electric field normal to the system
                 energia      = e_Fermi,   # Fermi level

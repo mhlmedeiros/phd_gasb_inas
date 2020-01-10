@@ -72,18 +72,24 @@ def current_density(axis, syst, parameters, eF_value = 0, energy = 428, lead_ind
 
     return 0
 
-def current_spin(axis, syst, parameters, eF_value = 0, energy = 428, lead_index=0, spin="up", colormap="Reds"):
-    #Copiado para phd
+def current_spin(syst, parameters, eF_value = 0, energy = 428, lead_index=0, spin="up", colormap="Reds", axis=None):
+    
     """
-    Gera mapa da densidade de corrente para elétrons de spin-up incidentes
-    da lead esquerda.
+    Gera mapa da densidade de corrente para elétrons incidentes
+    da lead esquerda. Se o axis é dado a função gera uma figura 
+    caso contrário somente a array resultante é retornada. Para
+    se gerar uma figura posterioriormente, o systema deve ser 
+    construído de modo identico àquele usado para calcular a 
+    corrente (syst). 
 
     "syst": Note que o sistema é TOTAL com a matriz Hamiltoniana 6x6;
-    "nome" : usado para salvar a figura (com extensão);
+    "parameters": dicionario -> define const. para a Hamiltoniana;
+    "eF_value" : valor da magnitude do campo elétrico em meV;
     "energy": potencial eletroquímico dos eletrons incidentes;
     "lead_index": "0" para elétrons incidentes da esquerda e "1" para elétrons da direita;
-    "parameters": dicionario -> define const. para a Hamiltoniana;
-    "W" = largura da strip
+    "spin": projeção do pseudo spin
+    "colormap" = mapa de cores usado para 'plotting'
+    "axis" = eixo usado para plot, caso seja 'None' a função retorna a array com os valores de corrente mas não gera figura 
 
     """
 
@@ -99,8 +105,10 @@ def current_spin(axis, syst, parameters, eF_value = 0, energy = 428, lead_index=
 
     current_spin = sum(J_spin(psi, params = parameters) for psi in wf(lead_index))
     # kwant.plotter.current(syst, current_spin, cmap = colormap, colorbar = False, show = False, ax=axis, density=1/9)
-    kwant.plotter.current(syst, current_spin, cmap = colormap, colorbar = False, show = False, ax=axis)
-    edit_axis(axis, spin) # change units to nm
+    
+    if axis != None:
+        kwant.plotter.current(syst, current_spin, cmap = colormap, colorbar = False, show = False, ax=axis)
+        edit_axis(axis, spin) # change units to nm
 
     return current_spin
 
@@ -221,12 +229,11 @@ def band_with_line_gasb(axis, momenta, energies,
     # plt.show()
     return 0
 
-def bands_cont2D_and_discr(axis, cont_energies, disc_energies, momenta, kx_max=0.25, E_min=300, E_max = 500, E_line = None):
-    # fig = plt.figure(figsize=(8,10))
-    # axis = fig.add_subplot(111)
+def bands_cont2D_and_discr(axis, free_elec_energies, confined_elec_energies, momenta, kx_max=0.25, E_min=300, E_max = 500, E_line = None):
+
     momenta_trans = momenta * (shapes.A_STD * shapes.A0*10**(-1))**(-1) # conversion to nm^{-1}
-    axis.plot(momenta_trans, cont_energies, linewidth=2.5,color="blue")
-    axis.plot(momenta_trans, disc_energies, linewidth = 0.8, color="black", linestyle="-")
+    axis.plot(momenta_trans, free_elec_energies, linewidth=2.5,color="blue")
+    axis.plot(momenta_trans, confined_elec_energies, linewidth = 0.8, color="black", linestyle="-")
     axis.hlines(E_line, -kx_max, kx_max, linewidth = 2.0, linestyle = "--", color = "red")
     axis.grid()
     axis.set_title("(a)", fontsize=FONT_TITLES)
@@ -237,8 +244,6 @@ def bands_cont2D_and_discr(axis, cont_energies, disc_energies, momenta, kx_max=0
     # plt.tight_layout()
     # plt.show()
     return 0
-
-
 
 def continuous_levels_eF(kx_value, ky_value, hamiltonian, params, eF_array):
     params_witout_eF = params.copy()
@@ -289,31 +294,3 @@ def collected_energies(syst, params, eF_array):
         energies_collected.append(kx_zero_levels(syst, params))
 
     return energies_collected
-
-# def calc_conductance(syst,params, energies):
-#
-#     # Compute conductance
-#     data = []
-#     for energy in energies:
-#         smatrix = kwant.smatrix(syst, energy, params=params)
-#         data.append(smatrix.transmission(1,0))
-#
-#     return data
-#
-# def plot_conductance(syst,params = params_103,choosed_color='blue',titulo='None'):
-#
-#     # syst = gasb_system()
-#     conductance = calc_conductance(syst,params, energies=np.linspace(420,445,200))
-#
-#     plt.figure()
-#     plt.grid()
-#     plt.plot(np.linspace(425,435,200), conductance,
-#             linestyle='',
-#             marker='o',
-#             color=choosed_color)
-#     plt.title(titulo)
-#     plt.xlabel(r"$\varepsilon_F$ [meV]")
-#     plt.ylabel(r"$G_{01}~[e^2/h]$")
-#     plt.ylim(0,6.5)
-#     plt.tight_layout()
-#     plt.show()
