@@ -78,26 +78,27 @@ def main():
     params_dict['eF'] = 62.
 
     # " Names for the files: "
+    path_data = "./data/transport/"
     name_preffixe = "data_" + str(Fermi_initial) + "_" + str(Fermi_final) + "_meV_Fermi_"
     name_Fermi = name_preffixe + str(N_values)
     name_transport_up = name_preffixe + "Transport_UP_" + str(N_values)
     name_transport_dn = name_preffixe + "Transport_DN_" + str(N_values)
     name_transport_total = name_preffixe + "Transport_Total_" + str(N_values)
-    np.save(name_Fermi + ".npy", Fermi_values)
-    np.savetxt(name_Fermi + ".txt", Fermi_values)
+    np.save(path_data + name_Fermi + ".npy", Fermi_values)
+    np.savetxt(path_data + name_Fermi + ".txt", Fermi_values)
 
     # " Transport: "
     transport_up, transport_dn, transport_total = calc_transp_Fermi(sistema, Fermi_values, params_dict)
 
     # Save the results in "numpy" format and "txt"
-    # np.save(name_transport_up + ".npy", transport_up)
-    # np.savetxt(name_transport_up + ".txt", transport_up)
+    # np.save(path_data + name_transport_up + ".npy", transport_up)
+    # np.savetxt(path_data + name_transport_up + ".txt", transport_up)
     #
-    # np.save(name_transport_dn + ".npy", transport_dn)
-    # np.savetxt(name_transport_dn + ".txt", transport_dn)
+    # np.save(path_data + name_transport_dn + ".npy", transport_dn)
+    # np.savetxt(path_data + name_transport_dn + ".txt", transport_dn)
 
-    np.save(name_transport_total + ".npy", transport_total)
-    np.savetxt(name_transport_total + ".txt", transport_total)
+    np.save(path_data + name_transport_total + ".npy", transport_total)
+    np.savetxt(path_data + name_transport_total + ".txt", transport_total)
 
 if __name__ == '__main__':
     main()

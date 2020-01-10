@@ -150,16 +150,16 @@ def main():
         transport[i] = smatrix.transmission(1, 0)
 
 
-
+    path_data = "./data/transport/"
     name_preffixe = "data_" + str(eF_initial) + "_" + str(eF_final) + "_"
     name_eF = name_preffixe + "eF_" + str(N_values)
     name_transport = name_preffixe + "Transport_" + str(N_values)
 
-    np.save(name_eF + ".npy", eF_values)
-    np.savetxt(name_eF + ".txt", eF_values)
+    np.save(path_data + name_eF + ".npy", eF_values)
+    np.savetxt(path_data + name_eF + ".txt", eF_values)
 
-    np.save(name_transport + ".npy", transport)
-    np.savetxt(name_transport + ".txt", transport)
+    np.save(path_data + name_transport + ".npy", transport)
+    np.savetxt(path_data + name_transport + ".txt", transport)
 
 if __name__ == '__main__':
     main()

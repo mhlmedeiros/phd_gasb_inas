@@ -41,8 +41,8 @@ def findAllExtr(xArray, yArray, delSignIni = 1):
 def main():
     xname = "data_62_64_eF_501_clean"
     yname = "data_62_64_transport_501_clean"
-    xArray = np.load("../" + xname + ".npy")
-    yArray = np.load("../" + yname + ".npy")
+    xArray = np.load("../data/transport/" + xname + ".npy")
+    yArray = np.load("../data/transport/" + yname + ".npy")
 
 
     indexes = findAllExtr(xArray, yArray)
@@ -51,11 +51,11 @@ def main():
     xExtrema = np.asarray([xArray[j] for j in indexes[:-1]])
     yExtrema = np.asarray([yArray[j] for j in indexes[:-1]])
 
-    np.save("../"+ xname + "_extrema.npy", xExtrema)
-    np.savetxt("../"+ xname + "_extrema.txt", xExtrema)
+    np.save("../data/transport/"+ xname + "_extrema.npy", xExtrema)
+    np.savetxt("../data/transport/"+ xname + "_extrema.txt", xExtrema)
 
-    np.save("../"+ yname + "_extrema.npy", yExtrema)
-    np.savetxt("../"+ yname + "_extrema.txt", yExtrema)
+    np.save("../data/transport/"+ yname + "_extrema.npy", yExtrema)
+    np.savetxt("../data/transport/"+ yname + "_extrema.txt", yExtrema)
 
 if __name__ == "__main__":
     main()
