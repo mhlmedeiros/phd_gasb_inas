@@ -28,7 +28,7 @@ path_fig   = path_geral + "images/" # place to figures
 path_data  = path_geral + "data_hdf5_phd_gasb_inas/" # place to figures
 folder_suf = "_Angstroms_GaSb_InAs/metallic_leads/fermi_fixed_electric_field_var/"
 
-def names(esp, eF, energia,V_shift, lead, porcent=0.25, Nkx=501, gammaLead=36.917):
+def names(esp, eF, energia,V_shift, lead, percent=0.25, Nkx=501, gammaLead=36.917):
     name_geral = esp + "_bands_transport_eF_" \
         + str(eF) + "meV_mu_" \
         + str(energia) + "meV"\
@@ -53,7 +53,7 @@ def names(esp, eF, energia,V_shift, lead, porcent=0.25, Nkx=501, gammaLead=36.91
     return name_fig, name_bands, name_currents, name_geral
 
 
-def plot_bands_with_currents(esp, eF, energia, centralShape, V_shift=100, porcent=0.25, Nkx=501, lead=0, gammaLead=36.917):
+def plot_bands_with_currents(esp, eF, energia, centralShape, V_shift=100, percent=0.25, Nkx=501, lead=0, gammaLead=36.917):
 
     """
     esp = "97", "103" ou "110"
@@ -70,8 +70,8 @@ def plot_bands_with_currents(esp, eF, energia, centralShape, V_shift=100, porcen
     hamiltonian_lead = gasb.free_ham(norbs = 6)
     sistema          = gasb.system_builder(hamiltonian_syst, hamiltonian_lead, centralShape)
 
-    vec_k_limited_confined = np.linspace(-1, 1, Nkx) * np.pi * porcent
-    vec_k_limited_free = np.linspace(-1, 1, Nkx) * np.pi/shapes.A_STD * porcent
+    vec_k_limited_confined = np.linspace(-1, 1, Nkx) * np.pi * percent
+    vec_k_limited_free = np.linspace(-1, 1, Nkx) * np.pi/shapes.A_STD * percent
 
     fig1 = plt.figure(figsize=(10,10))
     ax1 = fig1.add_subplot(121)
@@ -129,15 +129,15 @@ def plot_bands_with_currents(esp, eF, energia, centralShape, V_shift=100, porcen
     return 0
 
 
-def calc_bands_and_currents(esp, eF, energia, centralShape, V_shift=100, porcent=0.25, Nkx=501, lead=0, gammaLead=36.917):
+def calc_bands_and_currents(esp, eF, energia, centralShape, V_shift=100, percent=0.25, Nkx=501, lead=0, gammaLead=36.917):
 
     Up_current, Dn_current, Total_current = calcula_correntes(esp, eF, energia, centralShape, V_shift, lead, gammaLead)
-    kx_conf, E_free, E_conf = calcula_Bandas(esp, eF, centralShape, V_shift, porcent, Nkx, gammaLead)
+    kx_conf, E_free, E_conf = calcula_Bandas(esp, eF, centralShape, V_shift, percent, Nkx, gammaLead)
 
     path_bands = "./data/band_structure/"
     path_current = "./data/local_currents/"
     
-    _, name_bands, name_currents,_ = names(esp, eF, energia,V_shift, lead, porcent, Nkx, gammaLead)
+    _, name_bands, name_currents,_ = names(esp, eF, energia,V_shift, lead, percent, Nkx, gammaLead)
     np.savez(path_bands + name_bands, kx=kx_conf, E_free=E_free, E_conf=E_conf)
     np.savez(path_current + name_currents, Up=Up_current, Dn=Dn_current, Total=Total_current)
 
@@ -176,7 +176,7 @@ def calcula_correntes(esp, eF, energia, centralShape, V_shift = 100, lead = 0, g
     return current_Up, current_Dn, current_Total
 
 
-def calcula_Bandas(esp, eF, centralShape, V_shift = 100, porcent = 0.25, Nkx = 501, gammaLead =  36.917):
+def calcula_Bandas(esp, eF, centralShape, V_shift = 100, percent = 0.25, Nkx = 501, gammaLead =  36.917):
 
     params_raw = eval("gasb.params_" + esp)
     params_dict = dict(GammaLead =  gammaLead, V = V_shift, **params_raw)
@@ -185,8 +185,8 @@ def calcula_Bandas(esp, eF, centralShape, V_shift = 100, porcent = 0.25, Nkx = 5
     hamiltonian_lead = gasb.free_ham(norbs = 6)
     sistema          = gasb.system_builder(hamiltonian_syst, hamiltonian_lead, centralShape)
 
-    vec_k_limited_confined = np.linspace(-1, 1, Nkx) * np.pi * porcent
-    vec_k_limited_free = np.linspace(-1, 1, Nkx) * np.pi/shapes.A_STD * porcent
+    vec_k_limited_confined = np.linspace(-1, 1, Nkx) * np.pi * percent
+    vec_k_limited_free = np.linspace(-1, 1, Nkx) * np.pi/shapes.A_STD * percent
 
     "Bands: "
     free_elec_energies = trans.continuous_bands_2D(kx_array = vec_k_limited_free,
@@ -317,7 +317,7 @@ def calculateForManyeFs(shape):
                 energia      = energia,    # Fermi level
                 centralShape = shape,      # geometry of scattering reagion
                 V_shift      = 100,       # Potential on-site on the leads
-                porcent      = 0.25,       # Brillouin zone fraction shown
+                percent      = 0.25,       # Brillouin zone fraction shown
                 Nkx          = 501,        # number of points to form the band
                 lead         = 0           # lead where the incident wave come from
             )
@@ -354,7 +354,7 @@ def plottingForManyeFs(shape):
                 energia      = energia,    # Fermi level
                 centralShape = shape,      # geometry of scattering reagion
                 V_shift      = 100,       # Potential on-site on the leads
-                porcent      = 0.25,       # Brillouin zone fraction shown
+                percent      = 0.25,       # Brillouin zone fraction shown
                 Nkx          = 501,        # number of points to form the band
                 lead         = 0           # lead where the incident wave come from
             )
@@ -395,7 +395,7 @@ def calculateForManyFermiEnergies(shape):
                 energia      = e_Fermi,   # Fermi level
                 centralShape = shape,     # geometry of scattering reagion
                 V_shift      = 100,      # Potential on-site on the leads
-                porcent      = 0.25,      # Brillouin zone fraction shown
+                percent      = 0.25,      # Brillouin zone fraction shown
                 Nkx          = 501,       # number of points to form the band
                 lead         = 0          # lead where the incident wave come from
             )
