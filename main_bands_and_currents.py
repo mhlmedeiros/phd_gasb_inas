@@ -131,14 +131,15 @@ def plot_bands_with_currents(esp, eF, energia, centralShape, V_shift=100, percen
 
 def calc_bands_and_currents(esp, eF, energia, centralShape, V_shift=100, percent=0.25, Nkx=501, lead=0, gammaLead=36.917):
 
+    # kx_conf, E_free, E_conf = calcula_Bandas(esp, eF, centralShape, V_shift, percent, Nkx, gammaLead)
     Up_current, Dn_current, Total_current = calcula_correntes(esp, eF, energia, centralShape, V_shift, lead, gammaLead)
-    kx_conf, E_free, E_conf = calcula_Bandas(esp, eF, centralShape, V_shift, percent, Nkx, gammaLead)
+    
 
     path_bands = "./data/band_structure/"
     path_current = "./data/local_currents/"
     
     _, name_bands, name_currents,_ = names(esp, eF, energia,V_shift, lead, percent, Nkx, gammaLead)
-    np.savez(path_bands + name_bands, kx=kx_conf, E_free=E_free, E_conf=E_conf)
+    # np.savez(path_bands + name_bands, kx=kx_conf, E_free=E_free, E_conf=E_conf)
     np.savez(path_current + name_currents, Up=Up_current, Dn=Dn_current, Total=Total_current)
 
     return 0
@@ -250,12 +251,12 @@ def read_file_and_prepare_many_eFs():
         eFs.append(eF_values)
         mus.append(mu_values)
 
-    file.close();
+    file.close()
 
     return numero_de_entradas, sistemas, eFs, mus
 
 
-def read_file_and_prepare_many_Fermi():
+def read_file_and_prepare_many_Fermi_equally_spaced():
 
     try:
         infile = sys.argv[1]
@@ -281,7 +282,35 @@ def read_file_and_prepare_many_Fermi():
         eFs.append(eF_values)
         mus.append(mu_values)
 
-    file.close();
+    file.close()
+
+    return numero_de_entradas, sistemas, eFs, mus
+
+
+def read_file_and_prepare_many_Fermi():
+    try:
+        infile = sys.argv[1]
+    except:
+        print("Usage: " + sys.argv[0] + " input_file_name"); sys.exit(1)
+
+    file = open(infile,'r')
+
+    numero_de_entradas = int(file.readline()) # first line will be an lonely integer
+
+    sistemas = []
+    eFs = []
+    mus = []
+
+    for i in range(numero_de_entradas):
+        espessura = file.readline()
+        eF_values = float(file.readline())
+        mu_values = [float(x) for x in list(file.readline().split())]
+
+        sistemas.append(espessura.rstrip('\n'))
+        eFs.append(eF_values)
+        mus.append(mu_values)
+
+    file.close()
 
     return numero_de_entradas, sistemas, eFs, mus
 
@@ -389,6 +418,47 @@ def calculateForManyFermiEnergies(shape):
         eF = eFields[i]
 
         for e_Fermi in eFermis[i]:
+            calc_bands_and_currents(
+                esp          = espessura, # 97, 103 or 110
+                eF           = eF,        # electric field normal to the system
+                energia      = e_Fermi,   # Fermi level
+                centralShape = shape,     # geometry of scattering reagion
+                V_shift      = 100,      # Potential on-site on the leads
+                percent      = 0.25,      # Brillouin zone fraction shown
+                Nkx          = 501,       # number of points to form the band
+                lead         = 0          # lead where the incident wave come from
+            )
+
+
+def plottingForManyFermiEnergies(shape):
+    """
+
+    Use this function when the INPUT_FILE.txt follows the format discribed
+    by (WITHOUT THE COMENTS):
+
+    3               # number of system's configurations: positive integer
+    103             # width of the system: 97, 103 or 110 are accepted
+    30              # value of "eF" for the first system
+    11              # number of Fermi energies to use in first system
+    436 438         # min. and max. of Fermi energies for 1st system
+    97              # width of the 2nd system
+    60              # value of "eF" for the 2nd system
+    11              # number of Fermi energies to use in 2nd system
+    437 440         # min. and max. of Fermi energies for 2nd system
+    110             # width of the 3rd system
+    30              # value of "eF" for the 3rd system
+    11              # number of Fermi energies to use in 3rd system
+    428 430         # min. and max. of Fermi energies for 3rd system
+
+    """
+
+    n_sist, sists, eFields, eFermis = read_file_and_prepare_many_Fermi()
+
+    for i in range(n_sist):
+        espessura = sists[i]
+        eF = eFields[i]
+
+        for e_Fermi in eFermis[i]:
             plot_bands_with_currents(
                 esp          = espessura, # 97, 103 or 110
                 eF           = eF,        # electric field normal to the system
@@ -430,9 +500,9 @@ def main():
     #                                              Lconst = 0.5 * shapes.L_STD)
 
 
-    calculateForManyeFs(shapeScattering)
+    # calculateForManyeFs(shapeScattering)
 
-    # calculateForManyFermiEnergies(shapeScattering)
+    calculateForManyFermiEnergies(shapeScattering)
 
 
 

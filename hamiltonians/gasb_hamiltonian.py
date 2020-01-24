@@ -729,6 +729,29 @@ def system_builder(hamiltonian, lead_ham, centralShape, a_lattice = A_STD):
     syst = syst.finalized()
     return syst
 
+def just_system_builder(hamiltonian, centralShape, a_lattice = A_STD):
+    '''
+    Here we define the system's geometry as a rectangular slab without any leads
+    attached on it.
+
+    The hamiltonian argument is supposed to be an output of one of the following
+    function:
+        * hamiltonian_97
+        * hamiltonian_103
+        * hamiltonian_110
+
+
+    '''
+    template = kwant.continuum.discretize(hamiltonian, grid=a_lattice)
+
+    
+    syst = kwant.Builder()
+    syst.fill(template, centralShape, (0, 0))
+
+    syst = syst.finalized()
+    return syst
+
+
 def just_lead_builder(hamiltonian, W = W_STD, a = A_STD, symmetry=-1):
     """
     Generates a finalized lead to obtain the band structure.

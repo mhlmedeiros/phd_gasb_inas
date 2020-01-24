@@ -39,23 +39,41 @@ def findAllExtr(xArray, yArray, delSignIni = 1):
     return extrIndexes
 
 def main():
-    xname = "data_62_64_eF_501_clean"
-    yname = "data_62_64_transport_501_clean"
+    xname = "data_448_450.1_meV_Fermi_2001_L_707.1067811865476"
+    yname = "data_448_450.1_meV_Fermi_Transport_Total_2001_L_707.1067811865476"
     xArray = np.load("../data/transport/" + xname + ".npy")
     yArray = np.load("../data/transport/" + yname + ".npy")
 
+    reverso = False
 
-    indexes = findAllExtr(xArray, yArray)
+    if reverso == True:
+        xArray = xArray[::-1]
+        yArray = yArray[::-1]
 
-    print(indexes)
+    x_lim_min = 448
+    x_lim_max = 450
+    
+
+    x_new = xArray[(xArray >= x_lim_min) & (xArray <= x_lim_max)]
+    y_new = yArray[(xArray >= x_lim_min) & (xArray <= x_lim_max)]
+
+    indexes = findAllExtr(x_new, y_new)
+
+    # print(indexes)
     xExtrema = np.asarray([xArray[j] for j in indexes[:-1]])
     yExtrema = np.asarray([yArray[j] for j in indexes[:-1]])
 
-    np.save("../data/transport/"+ xname + "_extrema.npy", xExtrema)
-    np.savetxt("../data/transport/"+ xname + "_extrema.txt", xExtrema)
+    np.save("../data/transport/" + 
+                xname + "_extrema_Fermi_" +
+                str(x_lim_min) + "_" + str(x_lim_max) + ".npy", xExtrema)
+    np.savetxt("../data/transport/" + 
+                xname + "_extrema_Fermi_" + 
+                str(x_lim_min) + "_" + str(x_lim_max) + ".txt", xExtrema)
 
-    np.save("../data/transport/"+ yname + "_extrema.npy", yExtrema)
-    np.savetxt("../data/transport/"+ yname + "_extrema.txt", yExtrema)
+    np.save("../data/transport/"+ yname + "_extrema_Fermi_" +
+                str(x_lim_min) + "_" + str(x_lim_max) + ".npy", yExtrema)
+    np.savetxt("../data/transport/"+ yname + "_extrema_Fermi_" +
+                str(x_lim_min) + "_" + str(x_lim_max) + ".txt", yExtrema)
 
 if __name__ == "__main__":
     main()

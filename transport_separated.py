@@ -60,7 +60,11 @@ def calc_transp_Field(system, e_field_values, parameters, Fermi_energy=440):
 
 def main():
 
-    shapeScattering = shapes.Rect(shapes.W_STD, shapes.L_STD)
+    ## Dimensions of the system:
+    Length = shapes.L_STD
+    Width  = shapes.W_STD
+
+    shapeScattering = shapes.Rect(Width, Length)
 
     params_raw       = gasb.params_97
     gammaLead =  36.917
@@ -72,22 +76,23 @@ def main():
     sistema       = gasb.system_builder(hamiltonian_syst, hamiltonian_lead, shapeScattering)
     # sistema_dn       = gasb.system_builder(hamiltonian_syst_dn, hamiltonian_lead, shapeScattering)
 
-    Fermi_initial, Fermi_final, N_values = 435, 440, 2001
+    Fermi_initial, Fermi_final, N_values = 439.5, 449.5, 2001
     Fermi_values = np.linspace(Fermi_initial, Fermi_final, N_values)
 
     params_dict['eF'] = 62.
 
-    # " Names for the files: "
+    ## " Names for the files: "
+    L_nm = Length * shapes.A0 * 1/10
     path_data = "./data/transport/"
     name_preffixe = "data_" + str(Fermi_initial) + "_" + str(Fermi_final) + "_meV_Fermi_"
-    name_Fermi = name_preffixe + str(N_values)
-    name_transport_up = name_preffixe + "Transport_UP_" + str(N_values)
-    name_transport_dn = name_preffixe + "Transport_DN_" + str(N_values)
-    name_transport_total = name_preffixe + "Transport_Total_" + str(N_values)
+    name_Fermi = name_preffixe + str(N_values) + "_L_" + str(L_nm)
+    name_transport_up = name_preffixe + "Transport_UP_" + str(N_values) + "_L_" + str(L_nm)
+    name_transport_dn = name_preffixe + "Transport_DN_" + str(N_values)  + "_L_" + str(L_nm)
+    name_transport_total = name_preffixe + "Transport_Total_" + str(N_values) + "_L_" + str(L_nm)
     np.save(path_data + name_Fermi + ".npy", Fermi_values)
     np.savetxt(path_data + name_Fermi + ".txt", Fermi_values)
 
-    # " Transport: "
+    ## " Transport: "
     transport_up, transport_dn, transport_total = calc_transp_Fermi(sistema, Fermi_values, params_dict)
 
     # Save the results in "numpy" format and "txt"
