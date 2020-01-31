@@ -47,7 +47,7 @@ ax1.set_xlabel('Fermi [meV]')
 ax1.set_xlim((440, 435))
 # ax1.set_xlim((440, 439.5))
 ax1.set_ylim((-2, 13))
-ax1.set_ylabel(r'$\sigma$ $[e^2/h]$')
+ax1.set_ylabel(r'$G_{01}$ $[e^2/h]$')
 ax1.legend()
 
 ax2 = plt.axes([0, 0, 1, 1])

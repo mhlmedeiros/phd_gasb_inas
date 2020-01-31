@@ -31,11 +31,11 @@ def plot_spectrum(syst, Efields, parameters):
 
         # Obtain the Hamiltonian as a sparse matrix
         ham_mat = syst.hamiltonian_submatrix(params=parameters, sparse=True)
-
+        N = ham_mat.shape[0]
         # we only calculate the 15 lowest eigenvalues
-        ev = sla.eigsh(ham_mat.tocsc(), k=15, sigma=0,
+        ev = sla.eigsh(ham_mat.tocsc(), k=N//2, sigma=450, which='LM',
                        return_eigenvectors=False)
-
+        ev.sort()
         energies.append(ev)
 
     plt.figure()
@@ -53,21 +53,21 @@ def calcula_energies(syst, parameters):
     ham_mat = syst.hamiltonian_submatrix(params=parameters, sparse=True)
     N = ham_mat.shape[0]
     # we only calculate the 15 lowest eigenvalues
-    ev = sla.eigsh(ham_mat.tocsc(), k=N//1000, sigma=440,
+    ev = sla.eigsh(ham_mat.tocsc(), k=N//2, sigma=440,
                     # which="LA",
                     return_eigenvectors=False)
     # TO DO: ordenar valores
 
-
+    ev.sort()
     
 
     plt.figure()
-    plt.plot(ev)
+    plt.plot(ev,marker='o',linestyle='')
     plt.xlabel("N ")
     plt.ylabel("Energy [meV]")
     plt.show()
 
-    np.savetxt("test_closed_system_BE.txt", ev)
+    np.save("test_closed_system_BE.npy", ev)
 
 def main():
 
@@ -75,17 +75,17 @@ def main():
     hamiltonian = gasb.hamiltonian_97_k_minus()
     syst_shape  = shapes.Rect(shapes.W_STD, shapes.L_STD)
     
-    system = gasb.just_system_builder(hamiltonian, syst_shape)
+    system = gasb.just_system_builder(hamiltonian, syst_shape, a_lattice = 10 * shapes.A_STD)
     sub_matrix = system.hamiltonian_submatrix(params=parameters, sparse=True) 
     print(type(sub_matrix))
     print(sub_matrix.shape)
 
 
     eF_values = np.linspace(0,200,201)
-    # plot_spectrum(system, eF_values, parameters)
+    plot_spectrum(system, eF_values, parameters)
 
-    parameters["eF"] = 62.0
-    calcula_energies(system, parameters)
+    # parameters["eF"] = 62.0
+    # calcula_energies(system, parameters)
 
 
 if __name__ == '__main__':

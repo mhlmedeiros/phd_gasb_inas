@@ -61,7 +61,7 @@ def calc_transp_Field(system, e_field_values, parameters, Fermi_energy=440):
 def main():
 
     ## Dimensions of the system:
-    Length = shapes.L_STD
+    Length = 2*shapes.W_STD
     Width  = shapes.W_STD
 
     shapeScattering = shapes.Rect(Width, Length)

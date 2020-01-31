@@ -25,8 +25,9 @@ trans_eF_extrema = np.load("./data/transport/data_439.7_440_meV_Fermi_Transport_
 
 fig, ax1 = plt.subplots(figsize=(10,10))
 ax1.plot(Fermi_total, trans_eF)
+etiquetas_max = ['(a) 439.96 meV','(b) 439.91 meV','(c) 439.85 meV','(d) 439.79 meV','(e) 439.74 meV']
 
-for x, y, m, etiqueta in zip(Fermi_extrema[0::2], trans_eF_extrema[0::2], ["o","s","^","x","*"], ['(a)','(b)','(c)','(d)','(e)']):
+for x, y, m, etiqueta in zip(Fermi_extrema[0::2], trans_eF_extrema[0::2], ["o","s","^","d","*"], etiquetas_max):
     ax1.plot(x, y, linestyle=' ', marker=m, markersize=10, label=etiqueta)
 
 
@@ -34,7 +35,7 @@ ax1.grid()
 ax1.set_xlabel('Fermi [meV]')
 ax1.set_xlim((440, 439.7))
 ax1.set_ylim((0.5, 4))
-ax1.set_ylabel(r'$\sigma$ $[e^2/h]$')
+ax1.set_ylabel(r'$G_{01}$ $[e^2/h]$')
 ax1.legend(loc=4)
 
 # ax2 = plt.axes([0, 0, 1, 1])
