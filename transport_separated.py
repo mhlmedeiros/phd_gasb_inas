@@ -61,7 +61,7 @@ def calc_transp_Field(system, e_field_values, parameters, Fermi_energy=440):
 def main():
 
     ## Dimensions of the system:
-    Length = 2*shapes.W_STD
+    Length = shapes.W_STD
     Width  = shapes.W_STD
 
     shapeScattering = shapes.Rect(Width, Length)
@@ -76,7 +76,7 @@ def main():
     sistema       = gasb.system_builder(hamiltonian_syst, hamiltonian_lead, shapeScattering)
     # sistema_dn       = gasb.system_builder(hamiltonian_syst_dn, hamiltonian_lead, shapeScattering)
 
-    Fermi_initial, Fermi_final, N_values = 439.5, 449.5, 2001
+    Fermi_initial, Fermi_final, N_values = 435, 440, 2001
     Fermi_values = np.linspace(Fermi_initial, Fermi_final, N_values)
 
     params_dict['eF'] = 62.

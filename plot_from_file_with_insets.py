@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import matplotlib
-from mpl_toolkits.axes_grid.inset_locator import (inset_axes, InsetPosition, mark_inset)
+from mpl_toolkits.axes_grid1.inset_locator import (inset_axes, InsetPosition, mark_inset)
 import numpy as np
 
 FONT_LABELS = 18
@@ -15,14 +15,26 @@ plt.rc('font', family='serif')
 name_Fermi_1 = "./data/transport/data_435_440_meV_Fermi_2001.npy"
 name_trans_1 = "./data/transport/data_435_440_meV_Fermi_Transport_Total_2001.npy"
 
-name_Fermi_2 = "./data/transport/data_440_435_meV_Fermi_2001_L_13362.63941603591.npy"
-name_trans_2 = "./data/transport/data_440_435_meV_Fermi_Transport_Total_2001_L_13362.63941603591.npy"
+name_Fermi_2 = "./data/transport/data_440_435_meV_Fermi_2001_L_707.1067811865476.npy"
+name_trans_2 = "./data/transport/data_440_435_meV_Fermi_Transport_Total_2001_L_707.1067811865476.npy"
+
+name_Fermi_3 = "./data/transport/data_435_440_meV_Fermi_2001_L_599.9999999999999.npy"
+name_trans_3 = "./data/transport/data_435_440_meV_Fermi_Transport_Total_2001_L_599.9999999999999.npy"
+
+name_Fermi_4 = "./data/transport/data_435_440_meV_Fermi_2001_L_299.99999999999994.npy"
+name_trans_4 = "./data/transport/data_435_440_meV_Fermi_Transport_Total_2001_L_299.99999999999994.npy"
 
 Fermi_1 = np.load(name_Fermi_1)
 Fermi_2 = np.load(name_Fermi_2)
+Fermi_3 = np.load(name_Fermi_3)
+Fermi_4 = np.load(name_Fermi_4)
+
 
 trans_1 = np.load(name_trans_1)
 trans_2 = np.load(name_trans_2)
+trans_3 = np.load(name_trans_3)
+trans_4 = np.load(name_trans_4)
+
 
 # Transport Up e Down
 # trans_num1 = np.load("data_435_440_meV_Fermi_Transport_UP_2001.npy")
@@ -34,13 +46,24 @@ trans_2 = np.load(name_trans_2)
 # trans_eF = np.load(name_trans_eF)
 
 
-fig, ax1 = plt.subplots(figsize=(10,5))
-ax1.plot(Fermi_1, trans_1, linestyle = '-',
-                # color = 'red', 
-                label = r'$L = 500$ nm')
-ax1.plot(Fermi_2, trans_2, linestyle = '-',
-                # color = 'blue', 
-                label = r'$L = 500\sqrt{2} $ nm')
+fig, ax1 = plt.subplots(figsize=(15,7.5))
+
+ax1.plot(Fermi_4, trans_4, linestyle = '-',
+                linewidth = 1,
+                color = 'C0', 
+                label = r'$L = 300 $ nm')
+# ax1.plot(Fermi_1, trans_1, linestyle = '-',
+#                 color = 'C0', 
+#                 label = r'$L = 500$ nm')
+ax1.plot(Fermi_3, trans_3, linestyle = '-',
+                linewidth = 0.7,
+                color = 'C1', 
+                label = r'$L = 600 $ nm')
+# ax1.plot(Fermi_2, trans_2, linestyle = '--',
+#                 linewidth = 0.7,
+#                 color = 'C3', 
+#                 label = r'$L = 500\sqrt{2} $ nm')
+
 # ax1.plot(Fermi, trans_total)
 ax1.grid()
 ax1.set_xlabel('Fermi [meV]')
@@ -54,9 +77,11 @@ ax2 = plt.axes([0, 0, 1, 1])
 ip = InsetPosition(ax1, [0.5,0.07,0.3,0.3])
 ax2.set_axes_locator(ip)
 mark_inset(ax1, ax2, loc1=2, loc2=3, fc="none", ec='0.8')
+ax2.plot(Fermi_4[Fermi_4 >= 439.65], trans_4[Fermi_3>=439.65], linewidth=1, linestyle="-", color="C0")
+# ax2.plot(Fermi_1[Fermi_1 >= 439.65], trans_1[Fermi_1>=439.65],color='C0')
+ax2.plot(Fermi_3[Fermi_3 >= 439.65], trans_3[Fermi_3>=439.65], linewidth=0.7, linestyle="-", color="C1")
+# ax2.plot(Fermi_2[Fermi_2 >= 439.65], trans_2[Fermi_2>=439.65], linewidth=0.75, linestyle="--", color="C3")
 
-ax2.plot(Fermi_1[Fermi_1 >= 439.65], trans_1[Fermi_1>=439.65])
-ax2.plot(Fermi_2[Fermi_2 >= 439.65], trans_2[Fermi_2>=439.65])
 ax2.set_xlim((440, 439.65))
 ax2.tick_params(axis='both', which='major', labelsize=10)
 ax2.set_ylim((1.5, 3.0))
