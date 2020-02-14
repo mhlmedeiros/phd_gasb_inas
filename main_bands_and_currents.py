@@ -491,8 +491,10 @@ def main():
             # of Bohr's radius.
 
     """
+    Length = shapes.L_STD
+    Width  = shapes.W_STD
 
-    shapeScattering = shapes.Rect(shapes.W_STD, shapes.L_STD)
+    shapeScattering = shapes.Rect(Width, Length)
     # shapeScattering = shapes.ConstrictSmoothRect(Wmax   = shapes.W_STD,
     #                                              Wmin   = 0.5 * shapes.W_STD,
     #                                              beta   = 1 * shapes.A_STD,
@@ -503,6 +505,25 @@ def main():
     # calculateForManyeFs(shapeScattering)
 
     calculateForManyFermiEnergies(shapeScattering)
+
+    """
+        Current algorithmic flow in this code:
+
+            * System's shape is defined 
+
+            * "calculateForManyFermiEnergies" is called 
+
+            * 
+
+            * Read from text file with the following info:
+                - quantity of system's geometry;
+                - system thickness;
+                - electric field value(s);
+                - Fermi energy value(s).
+            
+            * "calc_bands_and_currents" is called
+
+    """
 
 
 

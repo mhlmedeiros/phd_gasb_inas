@@ -4,10 +4,11 @@ import matplotlib.pyplot as plt
 A0 = 0.529167 # raio de Bohr em Å = 10e-10 m
 L_STD  = 500    # nm = 10e-9
 W_STD  = 300    # nm = 10e-9
+R_STD  = 200    # nm = 10e-9
 A_STD  = 60     # units of Bohr's radius
 L_STD *= 10/A0  # convertion into units of Bohr's radius
 W_STD *= 10/A0  # convertion into units of Bohr's radius
-
+R_STD *= 10/A0  # convertion into units of Bohr's radius
 
 # classes (and function) for constricted shaped system
 class SmoothRect:
@@ -53,14 +54,24 @@ class ConstrictSmoothRect:
 class Rect:
 
     def __init__(self, Wmax = W_STD, Lmax = L_STD):
-        self.Wmax = Wmax;
-        self.Lmax = Lmax;
+        self.Wmax = Wmax
+        self.Lmax = Lmax
 
     def __call__(self, Site):
-        (x, y) = Site.pos;
-        W = self.Wmax;
-        L = self.Lmax;
+        (x, y) = Site.pos
+        W = self.Wmax
+        L = self.Lmax
         return (-L/2 < x < L/2) and (-W/2 < y < W/2)
+
+class Circular:
+
+    def __init__(self, Radius = R_STD):
+        self.Radius = Radius
+    
+    def __call__(self, Site):
+        (x, y) = Site.pos
+        R = self.Radius
+        return x**2 + y**2 < R**2 
 
 def expFermi(x, x0, beta):
     return 1/(np.exp(beta * (x0-x)) + 1)

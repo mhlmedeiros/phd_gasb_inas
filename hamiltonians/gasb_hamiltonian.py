@@ -24,12 +24,12 @@ from system_geometry.shapes import *
     # of Bohr's radius.
 
 """
-# A0 = 0.529167 # raio de Bohr em Å = 10e-10 m
-# L_STD  = 500    # nm = 10e-9
-# W_STD  = 300    # nm = 10e-9
-# A_STD  = 60     # units of Bohr's radius
-# L_STD *= 10/A0  # convertion into units of Bohr's radius
-# W_STD *= 10/A0  # convertion into units of Bohr's radius
+A0 = 0.529167 # raio de Bohr em Å = 10e-10 m
+L_STD  = 500    # nm = 10e-9
+W_STD  = 300    # nm = 10e-9
+A_STD  = 60     # units of Bohr's radius
+L_STD *= 10/A0  # convertion into units of Bohr's radius
+W_STD *= 10/A0  # convertion into units of Bohr's radius
 
 # Funtions of electric field magnitude:
 def ΔE_ΔR(x, A):

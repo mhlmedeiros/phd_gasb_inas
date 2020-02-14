@@ -52,8 +52,8 @@ def edit_axis(axis, spin):
     else:
         axis.xaxis.set_major_formatter(plt.FuncFormatter(formatter_current_axis))
         axis.yaxis.set_major_formatter(plt.FuncFormatter(formatter_current_axis))
-        axis.set_xlabel(r'$x$ [nm]',fontsize=FONT_LABELS)
-        axis.set_ylabel(r'$y$ [nm]',fontsize=FONT_LABELS)
+        axis.set_xlabel(r'$x$ [nm]',fontsize=FONT_TITLES)
+        axis.set_ylabel(r'$y$ [nm]',fontsize=FONT_TITLES)
 
 def trans_momenta(k_x):
     return k_x * (shapes.A_STD*shapes.A0*10**(-1))**(-1) # conversion from nm^{-1}
@@ -239,8 +239,8 @@ def bands_cont2D_and_discr(axis, free_elec_energies, confined_elec_energies, mom
     axis.set_title("(a)", fontsize=FONT_TITLES)
     axis.set_xlim(-kx_max, kx_max)
     axis.set_ylim(E_min, E_max)
-    axis.set_xlabel(r'k$_x$ [$nm^{-1}$]')
-    axis.set_ylabel(r'$\varepsilon$ [meV]')
+    axis.set_xlabel(r'k$_x$ [$nm^{-1}$]', fontsize=FONT_TITLES)
+    axis.set_ylabel(r'$\varepsilon$ [meV]', fontsize=FONT_TITLES)
     # plt.tight_layout()
     # plt.show()
     return 0
@@ -264,33 +264,33 @@ def continuous_levels_eF(kx_value, ky_value, hamiltonian, params, eF_array):
             Px = PxGeral, eF=eField_value)) for eField_value in eF_array])
     return levels_cont
 
-def kx_zero_levels(syst, params):
+def kx_zero_levels(syst_lead_like, params):
     '''
     This function GETS a
-        * finalized system: syst; and a
+        * translational symmetric finalized system: syst_lead_like; and a
         * dictionary of parameters: params;
     and RETURNS all the energy levels for k_x = 0.
     '''
-    bands = kwant.physics.Bands(syst.leads[0], params = params)
+    bands = kwant.physics.Bands(syst_lead_like, params = params)
     energies = bands(0) # This object is callable: given a momentum
                         # it returns a array containing the eigenenergies
                         # ao all modes at this momentum.
     return energies
 
-def collected_energies(syst, params, eF_array):
+def collected_energies(syst_lead_like, params, eF_array):
     '''
     This function generates a matrix containing in each column the eigenenergies
     for each value for electric field present in the array eF_array.
 
     We must pass to this function
-        * the finalized system: syst;
+        * the translational symmetric finalized system: syst_lead_like;
         * the dictionary of parameters: params; and
         * the array containing the desired values of electric field
     '''
-    energies_collected = [];
+    energies_collected = []
 
     for eField in eF_array:
         params["eF"] = eField
-        energies_collected.append(kx_zero_levels(syst, params))
+        energies_collected.append(kx_zero_levels(syst_lead_like, params))
 
     return energies_collected

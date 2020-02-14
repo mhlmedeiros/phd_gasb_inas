@@ -18,8 +18,8 @@ plt.rc('font', family='serif')
 
 
 # Remake the system:
-def make_system(esp="97", gammaLead=36.917, V_shift=100):
-    shapeScattering = shapes.Rect(shapes.W_STD, shapes.L_STD)
+def make_system(esp="97", gammaLead=36.917, V_shift=100, width = shapes.W_STD, length = shapes.L_STD):
+    shapeScattering = shapes.Rect(width, length)
 
     # folder_fig = esp + folder_suf
 
@@ -56,19 +56,20 @@ def plot_map(path,spin="Up",colormap="Reds",axis=None):
 
  
 def main():
-    Fermi_energy = 439.8542
-    path_data = "./data/local_currents/97_currents_eF_62.0meV_Fermi_"+ str(Fermi_energy) +"meV_VShift_100_lead_0_gammaLead_36.917.npz"
+    Fermi_energy = 439.8905
+    # path_data = "./data/local_currents/97_currents_eF_62.0meV_Fermi_"+ str(Fermi_energy) +"meV_VShift_100_lead_0_gammaLead_36.917.npz"
+    path_data = "./data/local_currents/97_currents_eF_62.0meV_Fermi_439.8905meV_VShift_100_lead_0_gammaLead_36.917_L_600.npz"
     total_current, up_current, down_current = load_currents(path_data)
     all_currents = [total_current, up_current, down_current]
 
-    syst = make_system()
+    syst = make_system(length = 2*shapes.W_STD)
     
     for current, colormap, name in zip(all_currents, ["Oranges", "Reds", "Blues"],["total","up","down"]):
         fig, axis = plt.subplots()
         kwant.plotter.current(syst, current, cmap = colormap, colorbar = False, show = False, ax=axis)
         tools.edit_axis(axis,'total')
         axis.set_title(r"$\varepsilon = $ "+str(Fermi_energy)+" meV", fontsize=tools.FONT_TITLES)
-        plt.savefig("../../"+name+"_current_"+str(Fermi_energy)+".png")
+        plt.savefig("../../"+name+"_current_"+str(Fermi_energy)+"L_600.png")
 
 
 if __name__ =='__main__':
