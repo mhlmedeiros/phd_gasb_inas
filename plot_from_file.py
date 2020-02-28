@@ -4,8 +4,8 @@ import matplotlib
 import numpy as np
 import read_plot_current as read_plot
 
-FONT_LABELS = 18
-FONT_TITLES = 20
+FONT_LABELS = 24
+FONT_TITLES = 26
 font = {'family' : 'serif', 'weight' : 'bold', 'size': FONT_LABELS}
 matplotlib.rc('font', **font)
 plt.rc('text', usetex=True)
@@ -25,7 +25,7 @@ trans_eF_extrema = np.load("./data/transport/data_439.7_440_meV_Fermi_Transport_
 
 fig, ax1 = plt.subplots(figsize=(10,10))
 ax1.plot(Fermi_total, trans_eF)
-etiquetas_max = ['(a) 439.96 meV','(b) 439.91 meV','(c) 439.85 meV','(d) 439.79 meV','(e) 439.74 meV']
+etiquetas_max = ['(a) 439.96','(b) 439.91','(c) 439.85','(d) 439.79','(e) 439.74']
 
 for x, y, m, etiqueta in zip(Fermi_extrema[0::2], trans_eF_extrema[0::2], ["o","s","^","d","*"], etiquetas_max):
     ax1.plot(x, y, linestyle=' ', marker=m, markersize=10, label=etiqueta)
@@ -61,7 +61,7 @@ ax1.legend(loc=4)
 # # ax3.set_xlabel(r"eF [meV]", fontsize = 10)
 # # ax3.grid()
 
-title_font = 15
+title_font = 26
 ax4 =  fig.add_axes([0.125, 0.70, 0.25, 0.25]) # for Min
 read_plot.plot_map("./data/local_currents/97_currents_eF_62.0meV_Fermi_439.961meV_VShift_100_lead_0_gammaLead_36.917.npz", axis=ax4) # Max
 # read_plot.plot_map("./data/local_currents/97_currents_eF_62.0meV_Fermi_439.92meV_VShift_100_lead_0_gammaLead_36.917.npz", axis=ax4) # Min

@@ -20,8 +20,8 @@ from hamiltonians.gasb_hamiltonian import *
 
 
 # Formatação para os gráficos:
-FONT_LABELS = 18
-FONT_TITLES = 20
+FONT_LABELS = 26
+FONT_TITLES = 28
 font = {'family' : 'serif', 'weight' : 'bold', 'size': FONT_LABELS}
 matplotlib.rc('font', **font)
 plt.rc('text', usetex=True)
@@ -196,9 +196,9 @@ def band_with_line_gasb(axis, momenta, energies,
     do Hamiltoniano.
     """
 
-    font_labels = 22
-    font_titles = 22
-    font = {'family' : 'serif', 'weight' : 'bold', 'size': font_labels}
+    # font_labels = 22
+    # font_titles = 22
+    font = {'family' : 'serif', 'weight' : 'bold', 'size': FONT_LABELS}
     matplotlib.rc('font', **font)
 
 
@@ -221,8 +221,8 @@ def band_with_line_gasb(axis, momenta, energies,
     axis.grid()
     axis.set_xlim(-kx_max, kx_max)
     axis.set_ylim(E_min, E_max)
-    axis.set_xlabel(r'k$_x$ [$nm^{-1}$]', fontsize=font_titles)
-    axis.set_ylabel(r'$\varepsilon$ [meV]', fontsize=font_titles)
+    axis.set_xlabel(r'k$_x$ [$nm^{-1}$]', fontsize=FONT_TITLES)
+    axis.set_ylabel(r'$\varepsilon$ [meV]', fontsize=FONT_TITLES)
     # fig = plt.gcf()
     # fig.set_size_inches(6, 6)
     # plt.tight_layout()

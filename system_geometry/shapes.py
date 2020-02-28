@@ -14,41 +14,41 @@ R_STD *= 10/A0  # convertion into units of Bohr's radius
 class SmoothRect:
 
     def __init__(self, Vmax, beta, x0, L):
-        self.Vmax = Vmax;
-        self.beta = beta;
-        self.x0   = x0;
-        self.L    = L;
+        self.Vmax = Vmax
+        self.beta = beta
+        self.x0   = x0
+        self.L    = L
 
 
     def __call__(self, x):
-        V    = self.Vmax;
-        beta = self.beta;
-        x0   = self.x0;
-        L    = self.L;
+        V    = self.Vmax
+        beta = self.beta
+        x0   = self.x0
+        L    = self.L
         return V * (expFermi(x, x0,-beta) + expFermi(x, x0+L, beta))
 
 class ConstrictSmoothRect:
 
     def __init__(self, Wmax = W_STD, Wmin = 0.5 * W_STD,
                 beta = A_STD, Lmax = L_STD, Lconst = 0.5 * L_STD):
-        self.Wmax   = Wmax;
-        self.Wmin   = Wmin;
-        self.beta   = beta;
-        self.Lmax   = Lmax;
-        self.Lconst = Lconst;
+        self.Wmax   = Wmax
+        self.Wmin   = Wmin
+        self.beta   = beta
+        self.Lmax   = Lmax
+        self.Lconst = Lconst
 
     def __call__(self, Site):
-        (x, y) = Site.pos;
-        V    = (self.Wmax - self.Wmin)/2;
-        beta = self.beta;
-        x0   = -(self.Lconst/2);
-        l    = self.Lconst;
-        F = SmoothRect( V, beta, x0, l);
-        G = SmoothRect(-V, beta, x0, l);
-        f = F(x) + self.Wmin/2; # limite superior
-        g = G(x) - self.Wmin/2; # limite inferior
-        # f =   self.Wmax/2;
-        # g = - self.Wmax/2;
+        (x, y) = Site.pos
+        V    = (self.Wmax - self.Wmin)/2
+        beta = self.beta
+        x0   = -(self.Lconst/2)
+        l    = self.Lconst
+        F = SmoothRect( V, beta, x0, l)
+        G = SmoothRect(-V, beta, x0, l)
+        f = F(x) + self.Wmin/2 # limite superior
+        g = G(x) - self.Wmin/2 # limite inferior
+        # f =   self.Wmax/2
+        # g = - self.Wmax/2
         return (g < y < f) and (-self.Lmax/2 < x < self.Lmax/2)
 
 class Rect:
@@ -75,23 +75,3 @@ class Circular:
 
 def expFermi(x, x0, beta):
     return 1/(np.exp(beta * (x0-x)) + 1)
-
-
-
-
-def main():
-    Vmax = 100;
-    beta = 10;
-    x0   = 2.5;
-    L    = 5;
-    W = 300;
-
-    x = np.linspace(0,10,100);
-
-    plt.plot(x,y)
-    plt.plot(x,g)
-    plt.show()
-
-
-if __name__ == '__main__':
-    main()

@@ -84,9 +84,9 @@ def plot_bands_with_currents_from_files(path_data_bands, path_data_currents,ferm
                                 free_elec_energies = E_free,
                                 confined_elec_energies = E_conf,
                                 momenta = kx,
-                                kx_max = 0.15,
-                                E_min = 430,
-                                E_max = 460,
+                                kx_max = 0.12,
+                                E_min = 435,
+                                E_max = 455,
                                 E_line = fermi_energy)
 
     "Currents: "
