@@ -20,8 +20,8 @@ from hamiltonians.gasb_hamiltonian import *
 
 
 # Formatação para os gráficos:
-FONT_LABELS = 26
-FONT_TITLES = 28
+FONT_LABELS = 30
+FONT_TITLES = 32
 font = {'family' : 'serif', 'weight' : 'bold', 'size': FONT_LABELS}
 matplotlib.rc('font', **font)
 plt.rc('text', usetex=True)
@@ -73,14 +73,14 @@ def current_density(axis, syst, parameters, eF_value = 0, energy = 428, lead_ind
     return 0
 
 def current_spin(syst, parameters, eF_value = 0, energy = 428, lead_index=0, spin="up", colormap="Reds", axis=None):
-    
+
     """
     Gera mapa da densidade de corrente para elétrons incidentes
-    da lead esquerda. Se o axis é dado a função gera uma figura 
+    da lead esquerda. Se o axis é dado a função gera uma figura
     caso contrário somente a array resultante é retornada. Para
-    se gerar uma figura posterioriormente, o systema deve ser 
-    construído de modo identico àquele usado para calcular a 
-    corrente (syst). 
+    se gerar uma figura posterioriormente, o systema deve ser
+    construído de modo identico àquele usado para calcular a
+    corrente (syst).
 
     "syst": Note que o sistema é TOTAL com a matriz Hamiltoniana 6x6;
     "parameters": dicionario -> define const. para a Hamiltoniana;
@@ -89,7 +89,7 @@ def current_spin(syst, parameters, eF_value = 0, energy = 428, lead_index=0, spi
     "lead_index": "0" para elétrons incidentes da esquerda e "1" para elétrons da direita;
     "spin": projeção do pseudo spin
     "colormap" = mapa de cores usado para 'plotting'
-    "axis" = eixo usado para plot, caso seja 'None' a função retorna a array com os valores de corrente mas não gera figura 
+    "axis" = eixo usado para plot, caso seja 'None' a função retorna a array com os valores de corrente mas não gera figura
 
     """
 
@@ -105,7 +105,7 @@ def current_spin(syst, parameters, eF_value = 0, energy = 428, lead_index=0, spi
 
     current_spin = sum(J_spin(psi, params = parameters) for psi in wf(lead_index))
     # kwant.plotter.current(syst, current_spin, cmap = colormap, colorbar = False, show = False, ax=axis, density=1/9)
-    
+
     if axis != None:
         kwant.plotter.current(syst, current_spin, cmap = colormap, colorbar = False, show = False, ax=axis)
         edit_axis(axis, spin) # change units to nm

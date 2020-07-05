@@ -47,7 +47,7 @@ def make_system(esp="97", gammaLead=36.917, V_shift=100, width = shapes.W_STD, l
 # For loading the data from the file:
 def load_currents(path):
     data = np.load(path)
-    total, up, down = data["Total"], data["Up"], data["Dn"] 
+    total, up, down = data["Total"], data["Up"], data["Dn"]
     return total, up, down
 
 # For the plotting the current map:
@@ -57,7 +57,7 @@ def plot_map(path,spin="Up",colormap="Reds",axis=None):
     syst = make_system()
     if axis == None:
         fig, axis = plt.subplots()
-    
+
     kwant.plotter.current(syst, data[spin], cmap = colormap, colorbar = False, show = False, ax=axis)
     tools.edit_axis(axis,'total')
     axis.set_title(" ", fontsize=tools.FONT_TITLES)
@@ -67,8 +67,8 @@ def plot_map(path,spin="Up",colormap="Reds",axis=None):
 def plot_bands_with_currents_from_files(path_data_bands, path_data_currents,fermi_energy):
 
     """
-    
-    """   
+
+    """
     fig1 = plt.figure(figsize=(10,10))
     ax1 = fig1.add_subplot(121)
     ax2 = fig1.add_subplot(322)
@@ -92,14 +92,14 @@ def plot_bands_with_currents_from_files(path_data_bands, path_data_currents,ferm
     "Currents: "
     # (Re)Make the system
     syst = make_system()
-    
+
     # Load the data
     total_current, up_current, down_current = load_currents(path_data_currents)
     all_currents = [total_current, up_current, down_current]
     color_maps   = ["Oranges", "Reds", "Blues"]
     current_type = ["total","up","down"]
     axes         = [ax2, ax3, ax4]
-    
+
     # Plot the maps
     for current, colormap, name, axis in zip(all_currents, color_maps, current_type, axes):
         kwant.plotter.current(syst, current, cmap = colormap, colorbar = False, show = False, ax=axis)
@@ -112,17 +112,17 @@ def plot_bands_with_currents_from_files(path_data_bands, path_data_currents,ferm
     # name_fig,_ = names(esp, eF, energia, V_shift, lead)
     # plt.savefig(path_fig + folder_fig + name_fig)
     plt.show()
-    return 
+    return
 
 
 def main():
     path_bands    = "./data/band_structure/97_band_eF_62.0meV_0.25BZ_Nkx_501.npz"
     path_currents = "./data/local_currents/97_currents_eF_62.0meV_Fermi_439.961meV_VShift_100_lead_0_gammaLead_36.917.npz"
     energy_Fermi  = float(path_currents.split('_')[-7][:-3])
-    
+
     plot_bands_with_currents_from_files(path_bands,
                                         path_currents,
-                                        energy_Fermi) 
+                                        energy_Fermi)
 
 
 

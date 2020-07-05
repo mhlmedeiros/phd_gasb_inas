@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import kwant
 
 import numpy as np
@@ -37,7 +39,7 @@ def make_system(esp="97", gammaLead=36.917, V_shift=100, width = shapes.W_STD, l
 
 def load_currents(path):
     data = np.load(path)
-    total, up, down = data["Total"], data["Up"], data["Dn"] 
+    total, up, down = data["Total"], data["Up"], data["Dn"]
     return total, up, down
 
 # Plot the current mapping
@@ -47,14 +49,14 @@ def plot_map(path,spin="Up",colormap="Reds",axis=None):
     syst = make_system()
     if axis == None:
         fig, axis = plt.subplots()
-    
+
     kwant.plotter.current(syst, data[spin], cmap = colormap, colorbar = False, show = False, ax=axis)
     tools.edit_axis(axis,'total')
     axis.set_title(" ", fontsize=tools.FONT_TITLES)
     # plt.show()
-    
 
- 
+
+
 def main():
     Fermi_energy = 439.8905
     # path_data = "./data/local_currents/97_currents_eF_62.0meV_Fermi_"+ str(Fermi_energy) +"meV_VShift_100_lead_0_gammaLead_36.917.npz"
@@ -63,13 +65,13 @@ def main():
     all_currents = [total_current, up_current, down_current]
 
     syst = make_system(length = 2*shapes.W_STD)
-    
+
     for current, colormap, name in zip(all_currents, ["Oranges", "Reds", "Blues"],["total","up","down"]):
         fig, axis = plt.subplots()
         kwant.plotter.current(syst, current, cmap = colormap, colorbar = False, show = False, ax=axis)
         tools.edit_axis(axis,'total')
         axis.set_title(r"$\varepsilon = $ "+str(Fermi_energy)+" meV", fontsize=tools.FONT_TITLES)
-        plt.savefig("../../"+name+"_current_"+str(Fermi_energy)+"L_600.png")
+        plt.savefig("../images_phd_gasb_inas/"+name+"_current_"+str(Fermi_energy)+"L_600.png")
 
 
 if __name__ =='__main__':
